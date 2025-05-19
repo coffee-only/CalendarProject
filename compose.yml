@@ -1,0 +1,22 @@
+
+services:
+  db:
+    container_name: IUseArchBTW-db
+    image: mysql # shold take the latest image
+    networks:
+      - internal
+    hostname: db
+    environment:
+      MYSQL_DATABASE: arch
+      MYSQL_ROOT_PASSWORD: arch
+    volumes:
+      - db_data:/var/lib/mysql
+
+
+
+volumes: 
+  db_data:
+
+
+networks:
+  internal: # we sh
