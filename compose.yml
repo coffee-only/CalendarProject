@@ -3,6 +3,10 @@ services:
   db:
     container_name: IUseArchBTW-db
     image: mysql # shold take the latest image
+    # port 3306 is the default mysql port
+    # use it for debugging only
+    ports:
+      - "3306:3306"
     networks:
       - internal
     hostname: db
