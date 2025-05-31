@@ -18,9 +18,9 @@ public class UserService{
     MAPPER = new UserMapper();
   }
   
-  public void Register(UserDTO dto, String psw) throws UserModelException {
+  public void Register(UserDTO dto, String psw, String salt) throws UserModelException {
     try { 
-      USER_REPO.Create(dto, psw);
+      USER_REPO.CreateUser(dto.getName(),dto.getEmail(), psw, salt);
     
     } catch(Exception ex) {//mieux gerer exception pour repo
       throw new UserModelException("Couldn't find user");
@@ -29,7 +29,7 @@ public class UserService{
 
   public void UpdateAccount(UserDTO dto) throws UserModelException{
     try {
-      USER_REPO.Update(dto);
+      USER_REPO.UpdateUser(dto.getName(),dto.getEmail());
 
     } catch(Exception ex) {
       throw new UserModelException("Couldn't find user");
@@ -38,7 +38,7 @@ public class UserService{
 
   public void DeleteAccount(String email, String psw) throws UserModelException{
     try{
-      USER_REPO.Delete(email, psw);
+      USER_REPO.DeleteUser(email);
     } catch(Exception ex){
       throw new UserModelException("Couldn't find user");
     }
@@ -46,7 +46,7 @@ public class UserService{
 
   public UserDTO GetAccountInfo(int id) throws UserModelException{ 
     try {
-      return MAPPER.apply(USER_REPO.getInfo(id));
+      return MAPPER.apply(USER_REPO.findById(id));
     } catch(Exception ex) {
       throw new UserModelException("Couldn't find user"); 
     }

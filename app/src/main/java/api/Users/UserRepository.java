@@ -1,8 +1,11 @@
 package api.Users;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-
-
+import jakarta.transaction.Transactional;
 /* DOCUMENTATION:
  * spring Repositories
  * https://docs.spring.io/spring-data/data-commons/docs/1.6.1.RELEASE/reference/html/repositories.html
@@ -10,30 +13,32 @@ package api.Users;
  *
  *
  * */
+@Repository
+public interface UserRepository extends JpaRepository<UserModel,Long>{
 
-public class UserRepository{
+
+  @Modifying
+  @Transactional
+  @Query(value="INSERT INTO CalUser(username,email,psw,salt) value(?1, ?2, ?3, ?4)", nativeQuery = true)
+  int CreateUser(String username, String email, String psw, String salt);
+  
+  @Modifying
+  @Transactional
+  @Query(value="DELETE FROM CalUser WHERE email = ?1", nativeQuery = true)
+  int DeleteUser(String email);
+  
+  @Modifying
+  @Transactional
+  @Query(value="UPDATE CalUser SET(username= ?1) WHERE email = ?2")
+  int UpdateUser(String username, String email);
 
 
-  public void Create(UserDTO user, String psw) {
-      //TODO: not sure how to connect yet
-  }
+  @Query(value= "SELECT * FROM CalUser WHERE id >=?1 && id<?2",nativeQuery = true)
+  UserModel fetchById(int min, int max);
 
-  public void Update(UserDTO user) {
-    
-  }
+  @Query(value = "SELECT * FROM CalUser WHERE email = ?1", nativeQuery = true)
+  UserModel findByEmail(String email);
 
-  public void Delete(String email, String psw) {
-    //requiert le email et le mot de passe pour delete
-  }
-
-  public List<UserModel>Read() {
-      
-  }
-
-  public UserModel getInfo(int id){
-    
-
-    return;
-  }
-
+  @Query(value = "SELECT * FROM CalUser WHERE id = ?1", nativeQuery = true)
+  UserModel findById(int id);
 }

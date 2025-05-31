@@ -29,8 +29,8 @@ public class UserController{
                                          @RequestBody String psw)
   {  
     try{
-      
-      USER_SERVICE.Register(new UserDTO(username, email), psw);
+      //create password logic 
+      USER_SERVICE.Register(new UserDTO(username, email), psw, salt);
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
 
