@@ -1,5 +1,6 @@
 package api.Users;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /*  Pour l'instant la class est basic
  *  Je compte checker plus sur comment spring gere 
@@ -18,9 +19,12 @@ public class UserService{
     MAPPER = new UserMapper();
   }
   
-  public void Register(UserDTO dto, String psw, String salt) throws UserModelException {
-    try { 
-      USER_REPO.CreateUser(dto.getName(),dto.getEmail(), psw, salt);
+  public void Register(UserDTO dto, String psw) throws UserModelException {
+     try { 
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);//to taylor 16 migh be too intense
+      String password = encoder.encode(psw);
+
+      USER_REPO.CreateUser(dto.getName(),dto.getEmail(), password);
     
     } catch(Exception ex) {//mieux gerer exception pour repo
       throw new UserModelException("Couldn't find user");

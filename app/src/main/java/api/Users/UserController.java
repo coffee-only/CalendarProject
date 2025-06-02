@@ -30,7 +30,7 @@ public class UserController{
   {  
     try{
       //create password logic 
-      USER_SERVICE.Register(new UserDTO(username, email), psw, salt);
+      USER_SERVICE.Register(new UserDTO(username, email), psw);
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
 
@@ -78,7 +78,7 @@ public class UserController{
   public ResponseEntity<String> GetAccountInfo(@RequestHeader String TokenJwt){ //prob have to change type 
     try{
       
-      USER_SERVICE.GetAccountInfo(TokenJwt.id);//token a handle a travers spring security
+      USER_SERVICE.GetAccountInfo(0);//token a handle a travers spring security
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
       
