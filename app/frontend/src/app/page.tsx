@@ -1,103 +1,156 @@
-import Image from "next/image";
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Calendar, Users, Shield, Zap } from "lucide-react";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { user } = useUser();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Navigation */}
+      <nav className="container mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Calendar className="h-8 w-8 text-blue-600" />
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              CalendApp
+            </h1>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="ghost">Se connecter</Button>
+              </SignInButton>
+              <Button>Commencer</Button>
+            </SignedOut>
+            
+            <SignedIn>
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                Salut, {user?.firstName || "Utilisateur"} ! 👋
+              </span>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <main className="container mx-auto px-6 py-16">
+        <div className="text-center max-w-4xl mx-auto">
+          <h2 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            Organisez votre temps avec{" "}
+            <span className="text-blue-600">simplicité</span>
+          </h2>
+          
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+            Un calendrier collaboratif moderne et intuitif pour gérer vos événements, 
+            planifier vos réunions et synchroniser votre équipe.
+          </p>
+
+          <SignedOut>
+            <div className="flex justify-center space-x-4 mb-16">
+              <SignInButton mode="modal">
+                <Button size="lg" className="text-lg px-8 py-3">
+                  Essayer gratuitement
+                </Button>
+              </SignInButton>
+              <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                En savoir plus
+              </Button>
+            </div>
+          </SignedOut>
+
+          <SignedIn>
+            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6 mb-16">
+              <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">
+                🎉 Vous êtes connecté(e) !
+              </h3>
+              <p className="text-green-700 dark:text-green-300 mb-4">
+                Bienvenue dans CalendApp. Vous pouvez maintenant accéder à toutes les fonctionnalités.
+              </p>
+              <Link href="/dashboard">
+                <Button size="lg">Accéder au Dashboard</Button>
+              </Link>
+            </div>
+          </SignedIn>
+
+          {/* Features */}
+          <div className="grid md:grid-cols-3 gap-8 mt-16">
+            <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+              <Users className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Collaboration
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Partagez vos calendriers et travaillez en équipe
+              </p>
+            </div>
+
+            <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+              <Shield className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Sécurisé
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Vos données sont protégées et chiffrées
+              </p>
+            </div>
+
+            <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+              <Zap className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Rapide
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Interface moderne et réactive
+              </p>
+            </div>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* Test Auth Section */}
+      <section className="bg-gray-50 dark:bg-gray-800/50 py-16">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+            Test d'authentification
+          </h3>
+          
+          <SignedOut>
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow max-w-md mx-auto">
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Vous n'êtes pas connecté(e)
+              </p>
+              <SignInButton mode="modal">
+                <Button className="w-full">Se connecter pour tester</Button>
+              </SignInButton>
+            </div>
+          </SignedOut>
+
+          <SignedIn>
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow max-w-md mx-auto">
+              <div className="flex items-center justify-center mb-4">
+                <UserButton />
+                <div className="ml-4 text-left">
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {user?.primaryEmailAddress?.emailAddress}
+                  </p>
+                </div>
+              </div>
+              <p className="text-green-600 font-medium">
+                ✅ Authentification réussie !
+              </p>
+            </div>
+          </SignedIn>
+        </div>
+      </section>
     </div>
   );
 }
