@@ -15,12 +15,30 @@ services:
       MYSQL_ROOT_PASSWORD: arch
     volumes:
       - db_data:/var/lib/mysql
-      - ./sql:/docker-entrypoint-initdb.d
+      - ./sql:/docker-entrypoint-initdb.d:z
 
+    
+  spring-app:
+    container_name: IUseArchBTW-api
+    build: 
+      dockerfile: ./Dockerfile
+    pull_policy: build
     ports:
-      - '3306:3306'
-
-      
+      - "8080:8080"
+    depends_on:
+      - db
+    develop:
+      watch:
+        - path: ./app 
+          action: rebuild
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: arch
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: arch
+    networks:
+      - internal
 volumes: 
   db_data:
 
