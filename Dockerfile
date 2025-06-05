@@ -2,16 +2,15 @@
 
 FROM maven as mavenbuild
 
-
 WORKDIR /app
 
-COPY ./app .
+COPY ./api .
 
 RUN mvn compile 
+
 RUN mvn clean package
 
 FROM openjdk:21
-
 
 WORKDIR /app
 
