@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
+@RequestMapping("/user")
 public class UserController{
   private final UserService USER_SERVICE;
 
@@ -23,25 +24,22 @@ public class UserController{
    USER_SERVICE = service; 
   }
   // non-query actions
-  @PostMapping("user/register")
-  public ResponseEntity<String> Register(@RequestBody String username, 
-                                         @RequestBody String email,
-                                         @RequestBody String psw)
-  {  
+  @PostMapping("/register")
+  public ResponseEntity<?> Register(@RequestBody RegisterDTO dto)
+  { System.out.println("in function");  
     try{
       //create password logic 
-      USER_SERVICE.Register(new UserDTO(username, email), psw);
+      USER_SERVICE.Register(new UserDTO(dto.username, dto.email), dto.password);
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
-
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }
 
 
 
-  @PatchMapping("user/update")//probably will be in its own RestController AccountManagement
-  public ResponseEntity<String> UpdateAccountUsername(@RequestBody String username,
+  @PatchMapping("/update")//probably will be in its own RestController AccountManagement
+  public ResponseEntity<?> UpdateAccountUsername(@RequestBody String username,
                                                       @RequestBody String email)
   {
     try{
@@ -56,13 +54,12 @@ public class UserController{
 
 
 
-  @DeleteMapping("user/delete")//probably will be in its own RestController AccountManagement
-  public ResponseEntity<String> DeleteAccount(@RequestBody String email,
-                                              @RequestBody String psw)
+  @DeleteMapping("/delete")//probably will be in its own RestController AccountManagement
+  public ResponseEntity<?> DeleteAccount()
   {
     try{
       
-      USER_SERVICE.DeleteAccount(email,psw);
+      USER_SERVICE.DeleteAccount("","");
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
       
@@ -74,11 +71,11 @@ public class UserController{
 
 
   //query actions
-  @GetMapping("user/getinfo")//probably will be in its own RestController AccountManagement
-  public ResponseEntity<String> GetAccountInfo(@RequestHeader String TokenJwt){ //prob have to change type 
+  @GetMapping("/getinfo")//probably will be in its own RestController AccountManagement
+  public ResponseEntity<String> GetAccountInfo(){ //prob have to change type 
     try{
       
-      USER_SERVICE.GetAccountInfo(0);//token a handle a travers spring security
+      USER_SERVICE.GetAccountInfo(0L);//token a handle a travers spring security
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
       
@@ -87,3 +84,13 @@ public class UserController{
   }
 
 }
+
+
+
+class RegisterDTO {
+    public String username;
+    public String email;
+    public String password;
+
+}
+

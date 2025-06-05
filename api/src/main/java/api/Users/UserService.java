@@ -1,6 +1,7 @@
 package api.Users;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 /*  Pour l'instant la class est basic
  *  Je compte checker plus sur comment spring gere 
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  *
  *
  * */
+@Service
 public class UserService{
   //tres coupler pour l'instant je suis entrain de checker comment spring boot fait des repo 
   private final UserRepository USER_REPO;//https://www.oracle.com/java/technologies/javase/codeconventions-namingconventions.html
@@ -48,9 +50,11 @@ public class UserService{
     }
   }
 
-  public UserDTO GetAccountInfo(int id) throws UserModelException{ 
+  public UserDTO GetAccountInfo(Long id) throws UserModelException{ 
     try {
-      return MAPPER.apply(USER_REPO.findById(id));
+      UserModel user = USER_REPO.findById(id)
+                                .orElseThrow(()-> new UserModelException("Couldn't find user"));
+      return MAPPER.apply(user);
     } catch(Exception ex) {
       throw new UserModelException("Couldn't find user"); 
     }
