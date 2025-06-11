@@ -1,10 +1,11 @@
-package api.Users;
+package api.maps;
 
 //java lib
 import java.util.function.Function;
 //spring lib
 import org.springframework.stereotype.Service;
-
+import api.models.UserModel;
+import api.dtos.UserDTO;
 
 
 @Service

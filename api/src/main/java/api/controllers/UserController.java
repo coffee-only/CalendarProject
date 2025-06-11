@@ -1,7 +1,5 @@
-package api.Users;
+package api.controllers;
 
-
-import java.util.concurrent.atomic.AtomicLong;
 
 
 import org.springframework.http.ResponseEntity;
@@ -9,11 +7,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestHeader;
+
 import org.springframework.web.bind.annotation.RequestMapping;
+
+
+
+import api.controllers.requestrecord.*;
+import api.services.UserService;
+import api.dtos.UserDTO;
+
+
 
 @RestController
 @RequestMapping("/user")
@@ -25,11 +32,11 @@ public class UserController{
   }
   // non-query actions
   @PostMapping("/register")
-  public ResponseEntity<?> Register(@RequestBody RegisterDTO dto)
-  { System.out.println("in function");  
+  public ResponseEntity<?> Register(@RequestBody RegisterRequest dto)
+  { 
     try{
       //create password logic 
-      USER_SERVICE.Register(new UserDTO(dto.username, dto.email), dto.password);
+      USER_SERVICE.Register(new UserDTO(dto.username(), dto.email()), dto.password());
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -39,12 +46,11 @@ public class UserController{
 
 
   @PatchMapping("/update")//probably will be in its own RestController AccountManagement
-  public ResponseEntity<?> UpdateAccountUsername(@RequestBody String username,
-                                                      @RequestBody String email)
+  public ResponseEntity<?> UpdateAccountUsername(@RequestBody UpdateRequest dto)
   {
     try{
       
-      USER_SERVICE.UpdateAccount(new UserDTO(username, email));
+      USER_SERVICE.UpdateAccount(new UserDTO(dto.username(), dto.email()));
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
       
@@ -54,12 +60,12 @@ public class UserController{
 
 
 
-  @DeleteMapping("/delete")//probably will be in its own RestController AccountManagement
-  public ResponseEntity<?> DeleteAccount()
+  @DeleteMapping("/delete/{id}")//probably will be in its own RestController AccountManagement
+  public ResponseEntity<?> DeleteAccount(@PathVariable Long id)
   {
     try{
       
-      USER_SERVICE.DeleteAccount("","");
+      USER_SERVICE.DeleteAccount(id);
       return new ResponseEntity<>(null, HttpStatus.OK);
     } catch(Exception ex) {
       
@@ -71,12 +77,12 @@ public class UserController{
 
 
   //query actions
-  @GetMapping("/getinfo")//probably will be in its own RestController AccountManagement
-  public ResponseEntity<String> GetAccountInfo(){ //prob have to change type 
+  @GetMapping("/getinfo/{id}")//probably will be in its own RestController AccountManagement
+  public ResponseEntity<?> GetAccountInfo(@PathVariable Long id)
+  { //prob have to change type 
     try{
-      
-      USER_SERVICE.GetAccountInfo(0L);//token a handle a travers spring security
-      return new ResponseEntity<>(null, HttpStatus.OK);
+      UserDTO dto = USER_SERVICE.GetAccountInfo(id);//token a handle a travers spring security
+      return new ResponseEntity<>(dto, HttpStatus.OK);
     } catch(Exception ex) {
       
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -87,10 +93,5 @@ public class UserController{
 
 
 
-class RegisterDTO {
-    public String username;
-    public String email;
-    public String password;
 
-}
 

@@ -1,4 +1,4 @@
-package api.Users;
+package api.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,12 +15,11 @@ import jakarta.validation.constraints.NotNull;
 public class UserModel{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private Long id;
   
   @NotNull
   @Column(name = "name")
-  private String name;
+  private String username;
 
   @NotNull
   @Column(name = "email")
@@ -29,23 +28,18 @@ public class UserModel{
   @NotNull
   @Column(name = "password")
   private String password;
-
-  @NotNull
-  @Column(name = "salt") 
-  private String salt;
   
   //required for JPA
   public UserModel(){}
 
   public UserModel( String name, String email, String password){
-    this.name = name;
+    this.username = name;
     this.email = email;
     this.password = password;
   }
 
   public Long getId() {return id;}
-  public String getName(){return name;} 
+  public String getName(){return username;} 
   public String getEmail(){return email;}
   public String getPassword(){return password;}
-  public String getSalt(){return salt;}
   }
