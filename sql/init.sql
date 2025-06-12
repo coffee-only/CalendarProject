@@ -1,15 +1,16 @@
 CREATE TABLE IF NOT EXISTS  CalUser (
-	id INTEGER NOT NULL,
+	id INTEGER NOT NULL AUTO_INCREMENT,
 	name TEXT NOT NULL,
-	email TEXT NOT NULL,
+	email TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
-	salt TEXT NOT NULL,
+  --constraints
 	PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS  CalGroup (
 	id INTEGER NOT NULL,
 	owner_id INTEGER NOT NULL,
+  --constraintes
 	PRIMARY KEY(id),
 	FOREIGN KEY(owner_id) 
 	  REFERENCES CalUser(id)
@@ -20,11 +21,15 @@ CREATE TABLE IF NOT EXISTS  CalGroup (
 CREATE TABLE IF NOT EXISTS  GroupMember (
 	group_id INTEGER NOT NULL,
 	user_id INTEGER NOT NULL,
-	PRIMARY KEY(group_id, user_id),
+  --constraints
+  PRIMARY KEY(group_id, user_id),
+
 	FOREIGN KEY(group_id) 
 	  REFERENCES CalGroup(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE,
+
+
 	FOREIGN KEY(user_id) 
 	  REFERENCES CalUser(id)
 	  ON DELETE CASCADE

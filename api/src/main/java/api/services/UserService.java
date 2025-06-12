@@ -1,8 +1,14 @@
-package api.Users;
+package api.services;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+import api.repositories.UserRepository;
+import api.dtos.UserDTO;
+import api.models.UserModel;
+import api.maps.UserMapper;
+import api.exceptions.UserModelException;
 /*  Pour l'instant la class est basic
  *  Je compte checker plus sur comment spring gere 
  *  Les repos pendant que je check spring security
@@ -33,6 +39,9 @@ public class UserService{
     }//a creer une classe mot de passe pour encapsuler la logic ou sinon quelque fonction
   }
 
+
+
+
   public void UpdateAccount(UserDTO dto) throws UserModelException{
     try {
       USER_REPO.UpdateUser(dto.getName(),dto.getEmail());
@@ -42,22 +51,28 @@ public class UserService{
     }
   }
 
-  public void DeleteAccount(String email, String psw) throws UserModelException{
+  public void DeleteAccount(Long id) throws UserModelException{
     try{
-      USER_REPO.DeleteUser(email);
+      USER_REPO.DeleteUser(id);
     } catch(Exception ex){
       throw new UserModelException("Couldn't find user");
     }
   }
 
   public UserDTO GetAccountInfo(Long id) throws UserModelException{ 
-    try {
-      UserModel user = USER_REPO.findById(id)
-                                .orElseThrow(()-> new UserModelException("Couldn't find user"));
+    try { 
+      System.out.println("REQUEST ID: "+id);
+      
+      USER_REPO.findAll().forEach(u -> 
+      System.out.println("Found user: ID=" + u.getId() + ", Email=" + u.getEmail()));
+
+      System.out.println("after for each");
+      UserModel user = USER_REPO.findById(2L)
+                                .orElseThrow(()-> new UserModelException("someting"));
+ 
       return MAPPER.apply(user);
     } catch(Exception ex) {
-      throw new UserModelException("Couldn't find user"); 
+      throw new UserModelException("Couldn't find user: "+ex.getMessage()); 
     }
   }
-
 }
