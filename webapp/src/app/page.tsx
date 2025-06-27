@@ -1,3 +1,10 @@
+/**
+ * @file page.tsx
+ * @folder app
+ * @author PierreDevC
+ * @description Home page
+ */
+
 import { Button } from "@/components/ui/button"
 import { Navbar } from "@/components/navbar"
 import Link from "next/link"
