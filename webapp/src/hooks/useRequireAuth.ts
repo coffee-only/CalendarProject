@@ -1,3 +1,10 @@
+/**
+ * @file useRequireAuth.ts
+ * @folder hooks
+ * @author PierreDevC
+ * @description Custom hook to require authentication
+ */
+
 'use client';
 
 import { useEffect } from 'react';

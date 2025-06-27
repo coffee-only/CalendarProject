@@ -18,6 +18,13 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-token')?.value;
   const { pathname } = request.nextUrl;
 
+  // Mode développement - bypass l'authentification
+  const isDev = true; 
+  
+  if (isDev) {
+    return NextResponse.next();
+  }
+
   // Rediriger les utilisateurs connectés depuis les pages auth
   if (authRoutes.includes(pathname) && token) {
     return NextResponse.redirect(new URL('/dashboard', request.url));

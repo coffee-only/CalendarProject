@@ -26,10 +26,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const isAuthenticated = !!user && !!token;
+  // Mode développement
+  const isDev = process.env.NEXT_PUBLIC_DEV_MODE === 'true';
+
+  const isAuthenticated = isDev || (!!user && !!token);
 
   useEffect(() => {
-    initializeAuth();
+    if (isDev) {
+      // Utilisateur fictif pour le développement
+      const devUser: User = {
+        id: 1,
+        username: "Développeur",
+        email: "dev@calendrier.com"
+      };
+      setUserState(devUser);
+      setTokenState("dev-token");
+      setIsLoading(false);
+    } else {
+      initializeAuth();
+    }
   }, []);
 
   const initializeAuth = async () => {
