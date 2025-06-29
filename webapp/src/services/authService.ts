@@ -8,7 +8,22 @@
 import api from '@/lib/api';
 import { LoginCredentials, RegisterCredentials, AuthResponse, User } from '@/types/auth';
 
+/**
+ * @class AuthService
+ * @description Service d'authentification
+ * @method login - Méthode pour se connecter
+ * @method register - Méthode pour s'inscrire
+ * @method getCurrentUser - Méthode pour récupérer l'utilisateur connecté
+ * @method refreshToken - Méthode pour rafraîchir le token
+ */
 export class AuthService {
+  /**
+   * @description Méthode pour se connecter
+   * @param {LoginCredentials} credentials - Les identifiants de connexion
+   * @returns {Promise<AuthResponse>} La réponse de l'API
+   * @throws {Error} Si l'erreur est détectée
+   * @api /user/login
+   */
   static async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
       const response = await api.post('/user/login', credentials);
@@ -18,6 +33,13 @@ export class AuthService {
     }
   }
 
+  /**
+   * @description Méthode pour s'inscrire
+   * @param {RegisterCredentials} credentials - Les identifiants d'inscription
+   * @returns {Promise<void>} La réponse de l'API
+   * @throws {Error} Si l'erreur est détectée
+   * @api /user/register
+   */
   static async register(credentials: RegisterCredentials): Promise<void> {
     try {
       await api.post('/user/register', {
@@ -30,6 +52,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * @description Méthode pour récupérer l'utilisateur connecté
+   * @returns {Promise<User>} L'utilisateur connecté
+   * @throws {Error} Si l'erreur est détectée
+   * @api /user/me
+   */
   static async getCurrentUser(): Promise<User> {
     try {
       const response = await api.get('/user/me');
@@ -39,6 +67,11 @@ export class AuthService {
     }
   }
 
+  /**
+   * @description Méthode pour rafraîchir le token
+   * @returns {Promise<AuthResponse>} La réponse de l'API
+   * @throws {Error} Si l'erreur est détectée
+   */
   static async refreshToken(): Promise<AuthResponse> {
     try {
       const response = await api.post('/user/refresh');
