@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     firstname TEXT NOT NULL,
     lastname  TEXT NOT NULL,
     username  TEXT NOT NULL,
+    user_creation DATE NOT NULL,
 	email TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
 	PRIMARY KEY(id)
@@ -11,6 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS user_group (
 	id INTEGER NOT NULL,
 	owner_id INTEGER NOT NULL,
+    group_name TEXT NOT NULL,
+    group_creation DATE NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY(owner_id) 
 	  REFERENCES users(id)
