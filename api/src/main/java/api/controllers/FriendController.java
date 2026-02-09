@@ -1,3 +1,6 @@
+package api.controllers;
+
+import api.services.FriendService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -11,51 +14,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class FriendController{
   private final FriendService FRIEND_SERVICE;
 
-  @PostMapping("/sendrequest")
-  public void SendFriendRequest(@RequestBody FriendRequest request){
-    try{
-
-
-    } catch() {
-
+    public FriendController(FriendService friendService) {
+        FRIEND_SERVICE = friendService;
     }
+
+    @PostMapping("/sendrequest")
+  public void SendFriendRequest(){
   }
 
   @PatchMapping("/accept")
   public void AccepterFriendRequest(){
-    try{
 
-    } catch() {
-
-    }
   }
 
   @DeleteMapping("/deny")
   public void DenyFriendRequest(){
-    try {
 
-    } catch() {
-
-    }
   
   }
 
 
   @GetMapping("/getsentrequest")
   public void GetSentFriendRequest(){
-    try {
 
-    } catch() {
-
-    }
   }
   
   @GetMapping("/getreceivedrequest")
   public void getRecevedRequest(){
-    try {
 
-    } catch() {
-
-    }
   }
 }

@@ -9,12 +9,9 @@ import api.dtos.UserDTO;
 import api.models.UserModel;
 import api.maps.UserMapper;
 import api.exceptions.UserModelException;
-/*  Pour l'instant la class est basic
- *  Je compte checker plus sur comment spring gere 
- *  Les repos pendant que je check spring security
- *
- *
- * */
+
+
+
 @Service
 public class UserService{
   //tres coupler pour l'instant je suis entrain de checker comment spring boot fait des repo 

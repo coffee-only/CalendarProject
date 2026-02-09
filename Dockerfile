@@ -1,19 +1,17 @@
 
 
-FROM maven as mavenbuild
+FROM gradle:jdk21 as gradlebuild
 
 WORKDIR /app
 
 COPY ./api .
 
-RUN mvn compile 
-
-RUN mvn clean package
+RUN ./gradlew build
 
 FROM openjdk:21
 
 WORKDIR /app
 
-COPY --from=mavenbuild /app/target/App-0.0.1-SNAPSHOT.jar /app.jar
+COPY --from=gradlebuild /app/build/libs/*.jar /app.jar
 
 CMD ["/usr/java/openjdk-21/bin/java", "-jar", "/app.jar"]
