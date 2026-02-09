@@ -1,34 +1,35 @@
-CREATE TABLE IF NOT EXISTS  CalUser (
+CREATE TABLE IF NOT EXISTS users (
 	id INTEGER NOT NULL AUTO_INCREMENT,
-	name TEXT NOT NULL,
+    firstname TEXT NOT NULL,
+    lastname  TEXT NOT NULL,
+    username  TEXT NOT NULL,
 	email TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
 	PRIMARY KEY(id)
 );
 
-CREATE TABLE IF NOT EXISTS  CalGroup (
+CREATE TABLE IF NOT EXISTS user_group (
 	id INTEGER NOT NULL,
 	owner_id INTEGER NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY(owner_id) 
-	  REFERENCES CalUser(id)
+	  REFERENCES users(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS  GroupMember (
+CREATE TABLE IF NOT EXISTS  group_member (
 	group_id INTEGER NOT NULL,
 	user_id INTEGER NOT NULL,
   PRIMARY KEY(group_id, user_id),
 
 	FOREIGN KEY(group_id) 
-	  REFERENCES CalGroup(id)
+	  REFERENCES user_group(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE,
 
-
 	FOREIGN KEY(user_id) 
-	  REFERENCES CalUser(id)
+	  REFERENCES users(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE
 );
@@ -38,16 +39,16 @@ CREATE TABLE IF NOT EXISTS  Friend (
 	friend_id INTEGER NOT NULL,
 	PRIMARY KEY(user_id, friend_id),
 	FOREIGN KEY(user_id) 
-	  REFERENCES CalUser(id)
+	  REFERENCES users(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE,
 	FOREIGN KEY(friend_id) 
-	  REFERENCES CalUser(id)
+	  REFERENCES users(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Availability (
+CREATE TABLE IF NOT EXISTS Schedule (
 	user_id INTEGER NOT NULL,
 	creneau ENUM(
 	  '9H00-10H00', '10H00-11H00', '11H00-12H00', '12H00-13H00', '13H00-14H00',
@@ -57,7 +58,7 @@ CREATE TABLE IF NOT EXISTS Availability (
 	at_date DATE NOT NULL,
 	PRIMARY KEY(user_id, creneau, at_date),
 	FOREIGN KEY(user_id) 
-	  REFERENCES CalUser(id)
+	  REFERENCES users(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE
 );
@@ -78,11 +79,11 @@ CREATE TABLE IF NOT EXISTS  Appointment (
 	at_date DATE NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY(user_id) 
-	  REFERENCES CalUser(id)
+	  REFERENCES users(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE,
 	FOREIGN KEY(group_id) 
-	  REFERENCES CalGroup(id)
+	  REFERENCES user_group(id)
 	  ON DELETE CASCADE
 	  ON UPDATE CASCADE,
 
