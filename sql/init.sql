@@ -1,18 +1,18 @@
 CREATE TABLE IF NOT EXISTS users (
 	id INTEGER NOT NULL AUTO_INCREMENT,
-    firstname TEXT NOT NULL,
-    lastname  TEXT NOT NULL,
-    username  TEXT NOT NULL,
+    firstname VARCHAR(50) NOT NULL,
+    lastname  VARCHAR(50) NOT NULL,
+    username  VARCHAR(50) NOT NULL,
     user_creation DATE NOT NULL,
-	email TEXT UNIQUE NOT NULL,
-	password TEXT NOT NULL,
+	email VARCHAR(100) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL,
 	PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS user_group (
 	id INTEGER NOT NULL,
 	owner_id INTEGER NOT NULL,
-    group_name TEXT NOT NULL,
+    group_name VARCHAR(50) NOT NULL,
     group_creation DATE NOT NULL,
 	PRIMARY KEY(id),
 	FOREIGN KEY(owner_id) 
