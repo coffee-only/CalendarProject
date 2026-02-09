@@ -1,17 +1,20 @@
 
 
-FROM gradle:jdk21 as gradlebuild
+FROM gradle:jdk21 AS builder
 
 WORKDIR /app
 
 COPY ./api .
 
-RUN ./gradlew build
+RUN ./gradlew build --no-daemon
 
-FROM openjdk:21
+RUN ls build/** && sleep 15
+
+
+FROM eclipse-temurin:21
 
 WORKDIR /app
 
-COPY --from=gradlebuild /app/build/libs/*.jar /app.jar
+COPY --from=builder /app/build/libs/*.jar /app.jar
 
-CMD ["/usr/java/openjdk-21/bin/java", "-jar", "/app.jar"]
+CMD ["/opt/java/openjdk/bin/java", "-jar", "/app.jar"]
