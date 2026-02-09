@@ -18,18 +18,25 @@ public class UserModel{
   private Long id;
   
   @NotNull
-  @Column(name = "name")
+  @Column(name = "username")
   private String username;
 
   @NotNull
-  @Column(name = "email")
+  @Column(name = "firstname")
+  private String firstname;
+
+  @NotNull
+  @Column(name = "lastname")
+  private String lastname;
+
+  @NotNull
+  @Column(unique = true, name = "email")
   private String email;
 
   @NotNull
   @Column(name = "password")
   private String password;
   
-  //required for JPA
   public UserModel(){}
 
   public UserModel( String name, String email, String password){

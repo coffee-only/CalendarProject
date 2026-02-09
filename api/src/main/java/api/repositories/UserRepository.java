@@ -17,8 +17,7 @@ import api.models.UserModel;
  *
  * */
 @Repository
-public interface UserRepository extends JpaRepository<UserModel,Long>{
-
+public
 
   @Modifying
   @Transactional
