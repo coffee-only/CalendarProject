@@ -1,19 +1,20 @@
 
 
-FROM maven as mavenbuild
+FROM gradle:jdk21 AS builder
 
 WORKDIR /app
 
 COPY ./api .
 
-RUN mvn compile 
+RUN ./gradlew build --no-daemon
 
-RUN mvn clean package
+RUN ls build/** && sleep 15
 
-FROM openjdk:21
+
+FROM eclipse-temurin:21
 
 WORKDIR /app
 
-COPY --from=mavenbuild /app/target/App-0.0.1-SNAPSHOT.jar /app.jar
+COPY --from=builder /app/build/libs/*.jar /app.jar
 
-CMD ["/usr/java/openjdk-21/bin/java", "-jar", "/app.jar"]
+CMD ["/opt/java/openjdk/bin/java", "-jar", "/app.jar"]

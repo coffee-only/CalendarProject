@@ -31,18 +31,18 @@ public class UserController{
    USER_SERVICE = service; 
   }
   // non-query actions
+  /* BUG:
   @PostMapping("/register")
   public ResponseEntity<?> Register(@RequestBody RegisterRequest dto)
   { 
     try{
       //create password logic 
       USER_SERVICE.Register(new UserDTO(dto.username(), dto.email()), dto.password());
-      return new ResponseEntity<>(null, HttpStatus.OK);
+      return new ResponseEntity<>(null, HttpStatus.OK); // FIXME: constructor does not exist
     } catch(Exception ex) {
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }
-
 
 
   @PatchMapping("/update")//probably will be in its own RestController AccountManagement
@@ -51,7 +51,7 @@ public class UserController{
     try{
       
       USER_SERVICE.UpdateAccount(new UserDTO(dto.username(), dto.email()));
-      return new ResponseEntity<>(null, HttpStatus.OK);
+      return new ResponseEntity<>(null, HttpStatus.OK); // FIXME: constructor does not exist
     } catch(Exception ex) {
       
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -66,12 +66,12 @@ public class UserController{
     try{
       
       USER_SERVICE.DeleteAccount(id);
-      return new ResponseEntity<>(null, HttpStatus.OK);
+      return new ResponseEntity<>(null, HttpStatus.OK); // FIXME: constructor does not exist
     } catch(Exception ex) {
       
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     } 
-  }
+  } */
 
 
 
