@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
+
 /* Model for table CalUser
  *
  * */
@@ -44,6 +46,7 @@ public class UserModel{
           String firstname,
           String lastname,
           String email,
+          DateTimeFormat time,
           String password
   ){
     this.username  = username;
