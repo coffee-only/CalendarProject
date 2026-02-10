@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS users (
     username  VARCHAR(50) NOT NULL,
     user_creation DATE NOT NULL,
 	email VARCHAR(100) UNIQUE NOT NULL,
-	password VARCHAR(255) NOT NULL,
 	PRIMARY KEY(id)
 );
 
