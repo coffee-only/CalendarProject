@@ -20,6 +20,6 @@ public class SecurityConfig {
             .requestMatchers("/actuator/**").permitAll()
             .anyRequest().authenticated())
         .httpBasic(Customizer.withDefaults());
-    return http.build(); 
+    return http.build();
   }
 }

@@ -13,7 +13,11 @@ import java.time.LocalDateTime
 class UserService(repo: UserRepository) {
 
     private val _repo: UserRepository = repo
-
+    
+    /*
+     * function that registers user if he doesnt exist
+     *  @throws Exception
+     */
     fun RegisterUser(
         username : String,
         firstname: String,
@@ -45,6 +49,8 @@ class UserService(repo: UserRepository) {
             Result.failure(Exception(message))
         };
     }
+
+
 
     fun findAllByEmail(email: String): UserModel{
         return _repo.findByEmailIgnoreCase(email);
