@@ -10,7 +10,6 @@ interface UserRepository: CrudRepository<UserModel, Long> {
     fun deleteById(id: ULong): Result<Void>
 
     //search queries
-    fun findByUsernameRegex(username: String): Iterable<UserModel>
-    fun findByEmail(email: String): Iterable<UserModel>
-
+    fun findAllByUsernameIgnoreCase(username: String): Iterable<UserModel>
+    fun findAllByEmailIgnoreCase(email: String): Iterable<UserModel>
 }

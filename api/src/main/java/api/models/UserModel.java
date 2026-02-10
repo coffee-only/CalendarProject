@@ -39,8 +39,16 @@ public class UserModel{
   
   public UserModel(){}
 
-  public UserModel( String name, String email, String password){
-    this.username = name;
+  public UserModel(
+          String username,
+          String firstname,
+          String lastname,
+          String email,
+          String password
+  ){
+    this.username  = username;
+    this.firstname = firstname;
+    this.lastname  = lastname;
     this.email = email;
     this.password = password;
   }
