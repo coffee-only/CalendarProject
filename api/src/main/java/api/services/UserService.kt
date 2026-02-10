@@ -26,7 +26,12 @@ class UserService(repo: UserRepository) {
             return Result.failure(Exception("[bad request] email is already used"));
         }
         //creating user & saving user
-        val user = UserModel(username, firstname, lastname, email, LocalDateTime.now())
+        val user = UserModel(
+            username = username,
+            firstname= firstname,
+            lastname = lastname,
+            email    = email
+        )
 
         return try {
             _repo.save(user)
