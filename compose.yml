@@ -31,7 +31,8 @@ services:
       watch:
         - path: ./app 
           action: rebuild
-    env_file: .env
+    env_file:
+      - .env
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306
