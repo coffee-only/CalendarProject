@@ -26,7 +26,8 @@ class UserService(repo: UserRepository) {
             return Result.failure(Exception("[bad request] email is already used"));
         }
         //creating user & saving user
-        val user = UserModel(username, firstname, lastname, email, LocalDateTime.now() ,encrypted)
+        val user = UserModel(username, firstname, lastname, email, LocalDateTime.now())
+
         return try {
             _repo.save(user)
             Result.success(Unit)
@@ -44,4 +45,7 @@ class UserService(repo: UserRepository) {
         return _repo.findByEmailIgnoreCase(email);
     }
 
+    fun findByUsername(username: String): Iterable<UserModel> {
+        throw Exception("not implemented");
+    }
 }
