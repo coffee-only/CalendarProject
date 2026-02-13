@@ -25,7 +25,6 @@ class UserService(
         // User already exists in database so we throw an exception since we cannot register it
         throw UserAlreadyExistsException("User ${registerationData.email} already exists")
     else userRepo.run {
-        TODO("Register in UserService is not implemented")
         // FIXME: register should hash the password before saving it to database
         //  Once fixed, remove the line above
         save(
@@ -37,7 +36,6 @@ class UserService(
         loginData: UserLoginDTO
     ): UserDTO = userRepo.let {
         val registeredUser = it.findByEmailIgnoreCase(loginData.email)
-        TODO("Login in UserService is not implemented")
         // FIXME: login should hash the password before comparing it to the one in database
         //  Once fixed, remove the line above
         if (registeredUser.password == loginData.password) registeredUser.toDto()

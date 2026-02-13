@@ -2,6 +2,7 @@ package api.controllers
 
 import api.dtos.OptionalUserDto
 import api.dtos.UserDTO
+import api.dtos.UserLoginDTO
 import api.dtos.UserRegisterationDto
 import api.services.UserService
 import org.springframework.http.HttpStatus
@@ -22,6 +23,13 @@ class UserController(
         val registeredUser = service.register(registerationData)
         return ResponseEntity<UserDTO>(registeredUser, HttpStatus.OK)
     }
+
+    @PostMapping("/login")
+    fun login(
+        @RequestBody loginData: UserLoginDTO
+    ): ResponseEntity<UserDTO> = service.login(loginData)
+        .let { ResponseEntity<UserDTO>(it, HttpStatus.OK) }
+
 
 
     @PatchMapping("/{id}") // Probably will be in its own RestController AccountManagement
