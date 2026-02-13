@@ -18,7 +18,7 @@ services:
 
     
   spring-app:
-    container_name: IUseArchBTW-api
+    container_name: api
     build: 
       dockerfile: ./Dockerfile
     pull_policy: build
