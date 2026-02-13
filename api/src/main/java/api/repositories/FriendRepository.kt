@@ -1,7 +1,9 @@
-package api.repositories;
+package api.repositories
+
+import org.springframework.stereotype.Repository
 
 
 /* TODO: Implement FriendRepository.*/
-class FriendRepository{
-    JDBC
+@Repository
+class FriendRepository {
 }
