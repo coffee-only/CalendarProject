@@ -1,27 +1,43 @@
 package api.entities
 
 import jakarta.persistence.*
+import java.time.LocalDate
 
 
 @Entity
 @Table(name = "users")
 class UserEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
-    @Column(name = "name") // NOTE: column name in database is currently "name" and not "username"
-    var username: String,
-    // FIXME: Ommited since it is not currently in database schema
-    // @Column(name = "firstname")
-    // var firstname: String,
-    // FIXME: Ommited since it is not currently in database schema
-    // @Column(name = "lastname")
-    // var lastname: String,
-    @Column(unique = true, name = "email")
-    var email: String,
-    @Column(name = "password")
-    var password: String,
-    // FIXME: Ommited since it is not currently in database schema
-    // @Column(name = "user_creation")
-    // var creationDate: LocalDateTime = LocalDateTime.now()
+    @GeneratedValue(
+        strategy = GenerationType.IDENTITY
+    ) var id: Long = 0,
+    @Column(
+        name = "username",
+        unique = false,
+        nullable = false,
+    ) var username: String,
+    @Column(
+        name = "firstname",
+        nullable = true,
+    ) var firstname: String? = null,
+    @Column(
+        name = "lastname",
+        nullable = true,
+    ) var lastname: String? = null,
+    @Column(
+        name = "email",
+        unique = true,
+        nullable = false,
+    ) var email: String,
+    @Column(
+        name = "password",
+        nullable = false,
+    ) var password: String,
+    @Column(
+        name = "user_creation",
+        nullable = false,
+    ) var creationDate: LocalDate = LocalDate.now(),
+    @ManyToMany(
+        mappedBy = "user_group"
+    ) var user_group: MutableList<GroupEntity> = mutableListOf()
 )

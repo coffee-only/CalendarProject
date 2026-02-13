@@ -6,15 +6,21 @@ import api.entities.UserEntity
 
 fun UserDTO.toEntity(withPassword: String): UserEntity = UserEntity(
     id = this.id,
-    username = this.name,
+    username = this.username,
     email = this.email,
-    password = withPassword
+    password = withPassword,
+    firstname = firstname,
+    lastname = this.lastname,
+    creationDate = this.creationDate
 )
 
 fun UserEntity.toDto(): UserDTO = UserDTO(
     id = this.id,
-    name = this.username,
-    email = this.email
+    username = this.username,
+    email = this.email,
+    firstname = this.firstname,
+    lastname = this.lastname,
+    creationDate = this.creationDate
 )
 
 fun UserRegisterationDto.toEntity(): UserEntity = UserEntity(
