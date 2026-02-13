@@ -4,6 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/Calendar/Calendar.iml" filepath="$PROJECT_DIR$/app/Calendar/Calendar.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/IuseArchBtw.iml" filepath="$PROJECT_DIR$/.idea/IuseArchBtw.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.demo.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.demo.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.demo.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.demo.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.demo.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/demo.iml" filepath="$PROJECT_DIR$/.idea/modules/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/demo.main.iml" filepath="$PROJECT_DIR$/.idea/modules/demo.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/demo.test.iml" filepath="$PROJECT_DIR$/.idea/modules/demo.test.iml" />
