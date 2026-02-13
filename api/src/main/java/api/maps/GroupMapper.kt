@@ -1,12 +1,10 @@
 package api.maps
 
 import api.dtos.GroupDto
-import api.dtos.UserDTO
 import api.entities.GroupEntity
 import api.entities.UserEntity
 import api.exceptions.UserNotFoundException
 import api.repositories.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
 
 
 fun GroupEntity.toDto(): GroupDto = GroupDto(
