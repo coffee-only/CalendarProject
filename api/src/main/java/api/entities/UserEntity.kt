@@ -1,12 +1,6 @@
 package api.entities
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
-import java.time.LocalDateTime
+import jakarta.persistence.*
 
 
 @Entity
@@ -15,14 +9,19 @@ class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
-    @Column(name = "username")
+    @Column(name = "name") // NOTE: column name in database is currently "name" and not "username"
     var username: String,
-    @Column(name = "firstname")
-    var firstname: String,
-    @Column(name = "lastname")
-    var lastname: String,
+    // FIXME: Ommited since it is not currently in database schema
+    // @Column(name = "firstname")
+    // var firstname: String,
+    // FIXME: Ommited since it is not currently in database schema
+    // @Column(name = "lastname")
+    // var lastname: String,
     @Column(unique = true, name = "email")
     var email: String,
-    @Column(name = "user_creation")
-    var creationDate: LocalDateTime = LocalDateTime.now()
+    @Column(name = "password")
+    var password: String,
+    // FIXME: Ommited since it is not currently in database schema
+    // @Column(name = "user_creation")
+    // var creationDate: LocalDateTime = LocalDateTime.now()
 )
