@@ -1,12 +1,9 @@
 package api.services
 
-import api.models.UserModel
+import api.entities.UserEntity
 import api.repositories.UserRepository
-import org.springframework.format.annotation.DateTimeFormat
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.stereotype.Component
 import java.io.IOException
-import java.time.LocalDateTime
 
 
 @Component
@@ -30,7 +27,7 @@ class UserService(repo: UserRepository) {
             return Result.failure(Exception("[bad request] email is already used"));
         }
         //creating user & saving user
-        val user = UserModel(
+        val user = UserEntity(
             username = username,
             firstname= firstname,
             lastname = lastname,
@@ -52,11 +49,11 @@ class UserService(repo: UserRepository) {
 
 
 
-    fun findAllByEmail(email: String): UserModel{
+    fun findAllByEmail(email: String): UserEntity{
         return _repo.findByEmailIgnoreCase(email);
     }
 
-    fun findByUsername(username: String): Iterable<UserModel> {
+    fun findByUsername(username: String): Iterable<UserEntity> {
         throw Exception("not implemented");
     }
 }

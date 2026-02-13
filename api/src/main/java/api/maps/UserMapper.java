@@ -4,14 +4,14 @@ package api.maps;
 import java.util.function.Function;
 //spring lib
 import org.springframework.stereotype.Service;
-import api.models.UserModel;
+import api.entities.UserEntity;
 import api.dtos.UserDTO;
 
 
 @Service
-public class UserMapper implements Function<UserModel, UserDTO>{
+public class UserMapper implements Function<UserEntity, UserDTO>{
     @Override
-    public UserDTO apply(UserModel u){
+    public UserDTO apply(UserEntity u){
       return new UserDTO(u.getName(), u.getEmail());
     }
 }

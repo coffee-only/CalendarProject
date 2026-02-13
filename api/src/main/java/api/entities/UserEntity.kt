@@ -1,4 +1,4 @@
-package api.models
+package api.entities
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "users")
-class UserModel(
+class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,

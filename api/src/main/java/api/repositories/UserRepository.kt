@@ -1,17 +1,17 @@
 package api.repositories
 
-import api.models.UserModel
+import api.entities.UserEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 
 @Repository
-interface UserRepository: CrudRepository<UserModel, Long> {
+interface UserRepository: CrudRepository<UserEntity, Long> {
     //delete
     fun deleteById(id: ULong): Result<Void>
 
     //search queries
-    fun findAllByUsernameIgnoreCase(username: String): Iterable<UserModel>
+    fun findAllByUsernameIgnoreCase(username: String): Iterable<UserEntity>
     fun existsByEmail(email: String): Boolean
-    fun findByEmailIgnoreCase(email: String): UserModel
+    fun findByEmailIgnoreCase(email: String): UserEntity
 }
