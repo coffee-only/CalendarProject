@@ -1,6 +1,7 @@
 package api.services
 
 import api.dtos.GroupDto
+import api.exceptions.GroupDeletionPermissionException
 import api.exceptions.GroupIdNotFoundException
 import api.exceptions.UserModelException
 import api.maps.toDto
@@ -48,6 +49,19 @@ class GroupService(
             .toDto()
     }
 
+    // NOTE: Use this method instead of deleteGroupe(id) once Auth permits fetching the client's ID
+    fun deleteGroupByOwner(ownerId: Long, groupId: Long): Unit {
+        val owner = grpRepo.findById(ownerId)
+            .orElseThrow { UserModelException("User not found: $ownerId") }
+
+        val group = grpRepo.findById(groupId)
+            .orElseThrow { GroupIdNotFoundException(groupId) }
+
+        if (group.ownerId != owner.id)
+            throw GroupDeletionPermissionException("User ${owner.name} is not the owner of group $groupId")
+
+        grpRepo.delete(group)
+    }
 
     fun deleteGroup(id: Long): Unit = grpRepo.deleteById(id)
 

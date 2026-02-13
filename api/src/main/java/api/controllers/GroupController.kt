@@ -38,6 +38,7 @@ class GroupController(
         @PathVariable newMemberId: Long
     ) = service.addMember(groupId, newMemberId)
 
+    // TODO: Use Auth to fetch the client's ID and call service.deleteGroupByOwner(clientId, groupId) instead
     @DeleteMapping("/{id}")
     fun deleteGroup(
         @PathVariable id: Long
