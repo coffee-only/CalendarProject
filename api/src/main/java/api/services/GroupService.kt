@@ -18,9 +18,14 @@ class GroupService(
     fun getGroups(): List<GroupDto> = grpRepo.findAll()
         .map(GroupEntity::toDto)
 
-    fun getUserGroups(userId: Long): List<GroupDto> = grpRepo.findAll()
-        .filter { it.ownerId == userId }
-        .map(GroupEntity::toDto)
+    fun getUserGroups(userId: Long): List<GroupDto> {
+        val userFromId = usrRepo.findById(userId)
+            .orElseThrow { UserModelException("User not found: $userId") }
+
+        return grpRepo.findByMembersContains(userFromId)
+            .map(GroupEntity::toDto)
+    }
+
 
     fun getGroup(id: Long): GroupDto = grpRepo.findById(id)
         .orElseThrow { GroupIdNotFoundException(id) }
@@ -35,7 +40,7 @@ class GroupService(
         val group = grpRepo.findById(groupId)
             .orElseThrow { GroupIdNotFoundException(groupId) }
         val newMember = usrRepo.findById(newMemberId)
-            .orElseThrow { UserModelException("User not found: $newMemberId") } // FIXME: No extension handler yet.
+            .orElseThrow { UserModelException("User not found: $newMemberId") } // FIXME: No exception handler yet.
                                                                                 //  please add it, otherwise the client will receive a 500 instead of a 404
 
         group.members.add(newMember)
