@@ -32,6 +32,12 @@ class GroupController(
         @RequestBody group: GroupDto
     ) = service.upsertGroup(group)
 
+    @PostMapping("/{groupId}/member/{newMemberId}")
+    fun addMemberToGroup(
+        @PathVariable groupId: Long,
+        @PathVariable newMemberId: Long
+    ) = service.addMember(groupId, newMemberId)
+
     @DeleteMapping("/{id}")
     fun deleteGroup(
         @PathVariable id: Long

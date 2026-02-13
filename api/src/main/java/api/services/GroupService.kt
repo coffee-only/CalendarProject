@@ -2,33 +2,48 @@ package api.services
 
 import api.dtos.GroupDto
 import api.exceptions.GroupIdNotFoundException
+import api.exceptions.UserModelException
 import api.maps.toDto
 import api.maps.toEntity
 import api.models.GroupEntity
 import api.repositories.GroupRepository
+import api.repositories.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class GroupService(
-    val repository: GroupRepository
+    val grpRepo: GroupRepository,
+    val usrRepo: UserRepository,
 ) {
-    fun getGroups(): List<GroupDto> = repository.findAll()
+    fun getGroups(): List<GroupDto> = grpRepo.findAll()
         .map(GroupEntity::toDto)
 
-    fun getUserGroups(userId: Long): List<GroupDto> = repository.findAll()
+    fun getUserGroups(userId: Long): List<GroupDto> = grpRepo.findAll()
         .filter { it.ownerId == userId }
         .map(GroupEntity::toDto)
 
-    fun getGroup(id: Long): GroupDto = repository.findById(id)
+    fun getGroup(id: Long): GroupDto = grpRepo.findById(id)
         .orElseThrow { GroupIdNotFoundException(id) }
         .toDto()
 
 
-    fun upsertGroup(group: GroupDto): GroupDto = repository.save(
+    fun upsertGroup(group: GroupDto): GroupDto = grpRepo.save(
             group.toEntity()
         ).toDto()
 
+    fun addMember(newMemberId: Long, groupId: Long): GroupDto {
+        val group = grpRepo.findById(groupId)
+            .orElseThrow { GroupIdNotFoundException(groupId) }
+        val newMember = usrRepo.findById(newMemberId)
+            .orElseThrow { UserModelException("User not found: $newMemberId") } // FIXME: No extension handler yet.
+                                                                                //  please add it, otherwise the client will receive a 500 instead of a 404
 
-    fun deleteGroup(id: Long): Unit = repository.deleteById(id)
+        group.members.add(newMember)
+        return grpRepo.save(group)
+            .toDto()
+    }
+
+
+    fun deleteGroup(id: Long): Unit = grpRepo.deleteById(id)
 
 }
