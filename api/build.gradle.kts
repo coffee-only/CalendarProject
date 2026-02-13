@@ -28,7 +28,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("tools.jackson.module:jackson-module-kotlin")
-	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
 
 	runtimeOnly("com.mysql:mysql-connector-j")
