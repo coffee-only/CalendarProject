@@ -1,7 +1,7 @@
 package api.repositories
 
 import api.dtos.GroupDto
-import api.models.GroupEntity
+import api.entities.GroupEntity
 import api.models.UserModel
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query

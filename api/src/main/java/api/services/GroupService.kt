@@ -6,7 +6,7 @@ import api.exceptions.GroupIdNotFoundException
 import api.exceptions.UserModelException
 import api.maps.toDto
 import api.maps.toEntity
-import api.models.GroupEntity
+import api.entities.GroupEntity
 import api.repositories.GroupRepository
 import api.repositories.UserRepository
 import org.springframework.stereotype.Service
@@ -34,7 +34,7 @@ class GroupService(
 
 
     fun upsertGroup(group: GroupDto): GroupDto = grpRepo.save(
-            group.toEntity()
+            group.toEntity(usrRepo)
         ).toDto()
 
     fun addMember(newMemberId: Long, groupId: Long): GroupDto {

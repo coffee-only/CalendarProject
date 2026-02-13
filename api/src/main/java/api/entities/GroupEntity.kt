@@ -1,4 +1,4 @@
-package api.models
+package api.entities
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -10,7 +10,8 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 
-@Entity @Table(name = "CalGroup")
+@Entity
+@Table(name = "CalGroup")
 class GroupEntity(
     @Id @GeneratedValue(
         strategy = GenerationType.IDENTITY
@@ -30,6 +31,6 @@ class GroupEntity(
         name = "GroupMember",
         joinColumns = [JoinColumn(name = "group_id")],
         inverseJoinColumns = [JoinColumn(name = "user_id")],
-    ) var members: MutableList<UserModel> = mutableListOf()
+    ) var members: MutableList<UserEntity> = mutableListOf()
 
 )
