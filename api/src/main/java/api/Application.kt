@@ -1,31 +1,33 @@
-package api; 
+package api
 
-import java.sql.Connection;
-
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import javax.sql.DataSource
 
 @SpringBootApplication
-public class Application{
-  public static void main(String[] args){
-    SpringApplication.run(Application.class, args);
-  }
-      @Autowired
-    private DataSource dataSource;
+class Application(
+    private val dataSource: DataSource
+) {
 
     @PostConstruct
-    public void logDatabaseInfo() {
-        try (Connection conn = dataSource.getConnection()) {
-            System.out.println("ACTUAL JDBC URL     : " + conn.getMetaData().getURL());
-            System.out.println("ACTUAL DB Driver    : " + conn.getMetaData().getDriverName());
-            System.out.println("ACTUAL DB Version   : " + conn.getMetaData().getDatabaseProductVersion());
-        } catch (Exception e) {
-            System.err.println("Failed to log DB metadata: " + e.getMessage());
+    fun logDatabaseInfo() {
+        try {
+            dataSource.connection.use { conn ->
+                println("ACTUAL JDBC URL     : " + conn.metaData.url)
+                println("ACTUAL DB Driver    : " + conn.metaData.driverName)
+                println("ACTUAL DB Version   : " + conn.metaData.databaseProductVersion)
+            }
+        } catch (e: Exception) {
+            System.err
+                .println("Failed to log DB metadata: ${e.message}")
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            SpringApplication.run(Application::class.java, *args)
         }
     }
 }

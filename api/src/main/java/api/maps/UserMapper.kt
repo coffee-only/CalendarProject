@@ -1,17 +1,24 @@
-package api.maps;
+package api.maps
 
-//java lib
-import java.util.function.Function;
-//spring lib
-import org.springframework.stereotype.Service;
-import api.entities.UserEntity;
-import api.dtos.UserDTO;
+import api.dtos.UserDTO
+import api.dtos.UserRegisterationDto
+import api.entities.UserEntity
 
+fun UserDTO.toEntity(withPassword: String): UserEntity = UserEntity(
+    id = this.id,
+    username = this.name,
+    email = this.email,
+    password = withPassword
+)
 
-@Service
-public class UserMapper implements Function<UserEntity, UserDTO>{
-    @Override
-    public UserDTO apply(UserEntity u){
-      return new UserDTO(u.getName(), u.getEmail());
-    }
-}
+fun UserEntity.toDto(): UserDTO = UserDTO(
+    id = this.id,
+    name = this.username,
+    email = this.email
+)
+
+fun UserRegisterationDto.toEntity(): UserEntity = UserEntity(
+    username = this.username,
+    email = this.email,
+    password = this.password
+)

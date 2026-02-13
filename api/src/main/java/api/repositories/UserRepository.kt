@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository: CrudRepository<UserEntity, Long> {
-    //delete
-    fun deleteById(id: ULong): Result<Void>
 
     //search queries
     fun findAllByUsernameIgnoreCase(username: String): Iterable<UserEntity>
