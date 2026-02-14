@@ -35,6 +35,6 @@ class GroupEntity(
         name = "group_member",
         joinColumns = [JoinColumn(name = "group_id")],
         inverseJoinColumns = [JoinColumn(name = "user_id")]
-    ) var user_group: MutableList<UserEntity> = mutableListOf()
+    ) var members: MutableList<UserEntity> = mutableListOf()
 
 )
