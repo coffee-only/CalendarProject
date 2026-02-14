@@ -32,9 +32,9 @@ class GroupEntity(
     
     @ManyToMany
     @JoinTable(
-        name = "GroupMember",
+        name = "group_member",
         joinColumns = [JoinColumn(name = "group_id")],
-        inverseJoinColumns = [JoinColumn(name = "user_id")],
-    ) var members: MutableList<UserEntity> = mutableListOf()
+        inverseJoinColumns = [JoinColumn(name = "user_id")]
+    ) var user_group: MutableList<UserEntity> = mutableListOf()
 
 )

@@ -12,7 +12,7 @@ fun GroupEntity.toDto(): GroupDto = GroupDto(
     name = this.name,
     ownerId = this.ownerId,
     creationDate = this.creationDate,
-    members = this.members
+    members = this.user_group
         .map(UserEntity::toDto)
 )
 
@@ -21,7 +21,7 @@ fun GroupDto.toEntity(userRepo: UserRepository): GroupEntity = GroupEntity(
     name = this.name,
     ownerId = this.ownerId,
     creationDate = this.creationDate,
-    members = this.members.map {
+    user_group = this.members.map {
         userRepo.findById(it.id)
             .orElseThrow { UserNotFoundException("User with id ${it.id} Not Found") }
     }.toMutableList()

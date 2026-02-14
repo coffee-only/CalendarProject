@@ -44,7 +44,7 @@ class GroupService(
         val newMember = usrRepo.findById(newMemberId)
             .orElseThrow { UserNotFoundException("User not found: $newMemberId") }
 
-        group.members.add(newMember)
+        group.user_group.add(newMember)
         return grpRepo.save(group)
             .toDto()
     }
