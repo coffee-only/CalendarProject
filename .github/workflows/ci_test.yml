@@ -1,8 +1,6 @@
 name: Java CI with Gradle
 
 on:
-  push:
-    branches: ["**"]
   pull_request:
     branches: ["**"] 
 
@@ -22,14 +20,20 @@ jobs:
 
       - name: unit test
         run: cd api && chmod +x gradlew && ./gradlew test
-    
+   
   integration-test:
     runs-on: unbuntu-latest
-
-      - name: setup docker
-        run:  docker compose up -d --build
+    
+    steps:
       
-      - name: docker health checks
-        run:  
 
-      - name: integration test
+
+  #system-check:
+    #runs-on: unbuntu-latest
+
+      #- name: setup docker
+      #  run:  docker compose up -d --build
+      
+      #- name: docker health checks
+      #  run: timeout 30s bash -c "until curl -sSf http://localhost:8080/health; do sleep 2; done" 
+
