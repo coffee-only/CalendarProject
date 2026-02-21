@@ -21,10 +21,10 @@ jobs:
       - name: unit test
         run: cd api && chmod +x gradlew && ./gradlew test
    
-  integration-test:
-    runs-on: unbuntu-latest
+  #integration-test:
+  #  runs-on: unbuntu-latest
     
-    steps:
+  #  steps:
       
 
 
