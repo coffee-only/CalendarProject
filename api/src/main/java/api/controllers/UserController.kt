@@ -19,7 +19,7 @@ class UserController(
     fun register(
         @RequestBody registerationData: UserRegisterationDto
     ): ResponseEntity<UserDTO> {
-        //create password logic
+
         val registeredUser = service.register(registerationData)
         return ResponseEntity<UserDTO>(registeredUser, HttpStatus.OK)
     }
