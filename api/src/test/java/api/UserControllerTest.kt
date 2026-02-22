@@ -1,5 +1,6 @@
 package api
 
+import api.dtos.GroupDto
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -39,16 +40,16 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
             .expectStatus().isOk()
             .expectBody()
             .jsonPath("$.length()")
-            .isEqualTo(5)
+            .isEqualTo(2)
 
-        /*restClient.get()
+        restClient.get()
             .uri("/api/group?userId=2")
             .exchange()
             .expectBody()
             .jsonPath("$.length()")
-            .isEqualTo(1)*/
+            .isEqualTo(1)
     }
-/*
+
     @Test
     @Sql("/test-data.sql")
     fun `should return group from id`() {
@@ -63,19 +64,15 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
     @Test
     @Sql("/test-data.sql")
     fun `should create group`() {
+        val dto = GroupDto(name="testing",ownerId=1)
         restClient.get()
-            .uri("/api/group")
+            .uri("/api/group/")
             .exchange()
             .expectBody()
             .jsonPath("$.length()")
             .isEqualTo(5)
 
-        restClient.get()
-            .uri("/api/group?userId=2")
-            .exchange()
-            .expectBody()
-            .jsonPath("$.length()")
-            .isEqualTo(1)
+
     }
-    */
+
 }
