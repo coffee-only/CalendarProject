@@ -29,10 +29,7 @@ class UserEntity(
         unique = true,
         nullable = false,
     ) var email: String,
-    @Column(
-        name = "password",
-        nullable = false,
-    ) var password: String,
+
     @Column(
         name = "user_creation",
         nullable = false,
