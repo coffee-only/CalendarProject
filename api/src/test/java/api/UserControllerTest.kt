@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
+import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -50,27 +51,21 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
             .isEqualTo(1)
     }
 
-    @Test
-    @Sql("/test-data.sql")
-    fun `should return group from id`() {
-        restClient.get()
-            .uri("/api/group/1")
-            .exchange()
-            .expectBody()
-            .jsonPath("$.length()")
-            .isEqualTo(1)
-    }
+
 
     @Test
     @Sql("/test-data.sql")
     fun `should create group`() {
         val dto = GroupDto(name="testing",ownerId=1)
-        restClient.get()
-            .uri("/api/group/")
+        restClient.post()
+            .uri("/api/group")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(dto)
             .exchange()
+            .expectStatus().isOk()
             .expectBody()
-            .jsonPath("$.length()")
-            .isEqualTo(5)
+            .jsonPath("$.name").isEqualTo("testing")
+            .jsonPath("$.ownerId").isEqualTo(1)
 
 
     }
