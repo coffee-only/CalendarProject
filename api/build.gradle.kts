@@ -34,8 +34,8 @@ dependencies {
 
 
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-	testImplementation("org.springframework.boot:spring-boot-starter-restclient-test")
-	testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
+	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
+	testImplementation("org.springframework.boot:spring-boot-webtestclient")
 
 
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")

@@ -1,3 +1,8 @@
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM users;
+DELETE FROM user_group;
+DELETE FROM group_member;
+
 
 INSERT INTO users (firstname, lastname, username, user_creation, email)
 VALUES
