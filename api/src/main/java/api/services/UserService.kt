@@ -32,15 +32,6 @@ class UserService(
         ).toDto()
     }
 
-    fun login(
-        loginData: UserLoginDTO
-    ): UserDTO = userRepo.let {
-        val registeredUser = it.findByEmailIgnoreCase(loginData.email)
-        // FIXME: login should hash the password before comparing it to the one in database
-        //  Once fixed, remove the line above
-        if (registeredUser.password == loginData.password) registeredUser.toDto()
-        else throw InvalidCredentialsException()
-    }
 
     fun findByEmail(email: String): UserDTO = userRepo.findByEmailIgnoreCase(email)
         .toDto()
@@ -59,7 +50,6 @@ class UserService(
 
         userUpdateData.name?.let { user.username = it }
         userUpdateData.email?.let { user.email = it }
-        userUpdateData.password?.let { user.password = it }
 
         save(user)
             .toDto()

@@ -24,12 +24,6 @@ class UserController(
         return ResponseEntity<UserDTO>(registeredUser, HttpStatus.OK)
     }
 
-    @PostMapping("/login")
-    fun login(
-        @RequestBody loginData: UserLoginDTO
-    ): ResponseEntity<UserDTO> = service.login(loginData)
-        .let { ResponseEntity<UserDTO>(it, HttpStatus.OK) }
-
 
 
     @PatchMapping("/{id}") // Probably will be in its own RestController AccountManagement

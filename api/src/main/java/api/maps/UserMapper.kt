@@ -8,7 +8,6 @@ fun UserDTO.toEntity(withPassword: String): UserEntity = UserEntity(
     id = this.id,
     username = this.username,
     email = this.email,
-    password = withPassword,
     firstname = firstname,
     lastname = this.lastname,
     creationDate = this.creationDate
@@ -26,5 +25,5 @@ fun UserEntity.toDto(): UserDTO = UserDTO(
 fun UserRegisterationDto.toEntity(): UserEntity = UserEntity(
     username = this.username,
     email = this.email,
-    password = this.password
+
 )
