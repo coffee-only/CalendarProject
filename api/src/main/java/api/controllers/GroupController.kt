@@ -15,28 +15,32 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/group")
 class GroupController(
     val service: GroupService,
-) {
+)
+{
     @GetMapping
-    fun getGroups(
-        @RequestParam(required = false) userId: Long?,
-    ) = if (userId != null) service.getUserGroups(userId)
+    fun getGroups(@RequestParam(required = false) userId: Long?)
+    = if (userId != null) service.getUserGroups(userId)
         else service.getGroups()
+
 
     @GetMapping("/{id}")
     fun getGroup(
         @PathVariable id: Long
     ) = service.getGroup(id)
 
+
     @PostMapping
     fun upsertGroup(
         @RequestBody group: GroupDto
     ) = service.upsertGroup(group)
+
 
     @PostMapping("/{groupId}/member/{newMemberId}")
     fun addMemberToGroup(
         @PathVariable groupId: Long,
         @PathVariable newMemberId: Long
     ) = service.addMember(groupId, newMemberId)
+
 
     // TODO: Use Auth to fetch the client's ID and call service.deleteGroupByOwner(clientId, groupId) instead
     @DeleteMapping("/{id}")
