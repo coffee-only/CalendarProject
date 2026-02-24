@@ -20,7 +20,7 @@ class GroupController(
     @GetMapping
     fun getGroups(@RequestParam(required = false) userId: Long?)
     = if (userId != null) service.getUserGroups(userId)
-        else service.getGroups()
+        else service.getAllGroups()
 
 
     @GetMapping("/{id}")

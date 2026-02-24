@@ -16,7 +16,7 @@ class GroupService(
     val grpRepo: GroupRepository,
     val usrRepo: UserRepository,
 ) {
-    fun getGroups(): List<GroupDto> = grpRepo.findAll()
+    fun getAllGroups(): List<GroupDto> = grpRepo.findAll()
         .map(GroupEntity::toDto)
 
     fun getUserGroups(userId: Long): List<GroupDto> {
