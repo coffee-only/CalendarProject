@@ -51,8 +51,9 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
             .isEqualTo(1)
     }
 
-
-
+    @Test
+    @Sql("/test-data.sql")
+    funf `should `
     @Test
     @Sql("/test-data.sql")
     fun `should create group`() {
@@ -66,7 +67,6 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
             .expectBody()
             .jsonPath("$.name").isEqualTo("testing")
             .jsonPath("$.ownerId").isEqualTo(1)
-
 
     }
 
