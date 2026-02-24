@@ -50,9 +50,10 @@ class GroupController(
     ) = service.addMember(groupId, newMemberId)
     */
 
-    // TODO: Use Auth to fetch the client's ID and call service.deleteGroupByOwner(clientId, groupId) instead
+
     @DeleteMapping("/{id}")
     fun deleteGroup(
+        @SessionAttribute(name="USER") self: UserEntity,
         @PathVariable id: Long
     ) = service.deleteGroup(id)
 
