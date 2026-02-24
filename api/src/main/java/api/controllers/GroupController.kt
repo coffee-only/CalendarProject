@@ -20,15 +20,14 @@ class GroupController(
 )
 {
     @GetMapping
-    fun getGroups(@RequestParam(required = false) userId: Long?)
-    = if (userId != null) service.getUserGroups(userId)
+    fun getGroups( @SessionAttribute(name="USER") self: UserEntity?,)
+    = if (self != null) service.getUserGroups(self.id)
     else service.getAllGroups()
 
 
     @GetMapping("/{id}")
-    fun getOneGroup(
-        @PathVariable id: Long
-    ) = service.getGroupById(id)
+    fun getOneGroup(@PathVariable("id") id: Long)
+    = service.getGroupById(id)
 
 
     @PostMapping("/create")

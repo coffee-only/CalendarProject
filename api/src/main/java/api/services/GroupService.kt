@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import api.entities.GroupMemberId
+import api.entities.GroupRole
 import api.exceptions.InvalidCredentialsException
 import api.maps.toEntity
 import api.repositories.MemberRepository
@@ -40,7 +41,7 @@ class GroupService(
             id = GroupMemberId(savedGroup.id, self.id),
             group = savedGroup,
             user = self,
-            groupRole = "OWNER"
+            groupRole = GroupRole.OWNER,
         );
 
         memberRepo.save(member);
@@ -52,7 +53,7 @@ class GroupService(
     @Transactional
     fun update(self: UserEntity, group: GroupDto): GroupDto {
         //check if user as the necessary permission to update group
-        checkRole(self, group, "OWNER");
+        checkRole(self, group, GroupRole.OWNER);
 
         val savedGroup = groupRepo.save(group.toEntity());
         return savedGroup.toDto();
@@ -61,7 +62,7 @@ class GroupService(
     @Transactional
     fun addMember(self: UserEntity, group: GroupDto, invited: Long): GroupDto {
         //check if user as the necessary permission to update group
-        checkRole(self, group, "OWNER");
+        checkRole(self, group, GroupRole.OWNER);
 
         val invitedProxy = userRepo.getReferenceById(invited)
         val groupProxy   = groupRepo.getReferenceById(group.id)
@@ -70,7 +71,7 @@ class GroupService(
             id = GroupMemberId(group.id, invited),
             group = groupProxy,
             user  = invitedProxy,
-            groupRole = "MEMBER"
+            groupRole = GroupRole.OWNER,
         )
 
         memberRepo.save(member)
@@ -96,7 +97,7 @@ class GroupService(
         .map(GroupEntity::toDto)
 
     fun getUserGroups(userId: Long): List<GroupDto>
-        = memberRepo.findByUserId(userId).map {it.group.toDto()}
+        = memberRepo.findByIdUserId(userId).map {it.group.toDto()}
 
 
     fun getGroupById(id: Long): GroupDto = groupRepo.findById(id)
@@ -107,7 +108,7 @@ class GroupService(
 
 
 
-    private fun checkRole(user: UserEntity, group: GroupDto, role: String): GroupMemberEntity {
+    private fun checkRole(user: UserEntity, group: GroupDto, role: GroupRole): GroupMemberEntity {
         //check if user as the necessary permission to update group
         val membership = memberRepo.findById(
             GroupMemberId(

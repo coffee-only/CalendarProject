@@ -35,6 +35,7 @@ class GroupMemberEntity(
     @JoinColumn(name = "user_id")
     val user: UserEntity,
 
+    @Column(name = "group_role")
     @Enumerated(EnumType.STRING)
-    val groupRole: String
+    val groupRole: GroupRole,
 )
