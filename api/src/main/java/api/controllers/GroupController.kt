@@ -1,6 +1,7 @@
 package api.controllers
 
 import api.dtos.GroupDto
+import api.entities.UserEntity
 import api.services.GroupService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.SessionAttribute
 
 @RestController
 @RequestMapping("/group")
@@ -29,11 +31,17 @@ class GroupController(
     ) = service.getGroupById(id)
 
 
-    @PostMapping
-    fun upsertGroup(
+    @PostMapping("/create")
+    fun createGroup(
+        @SessionAttribute(name="USER") self: UserEntity,
         @RequestBody group: GroupDto
-    ) = service.upsertGroup(group)
+    ) = service.create(self,group)
 
+    @PostMapping("/update")
+    fun updateGroup(
+        @SessionAttribute(name="USER") self: UserEntity,
+        @RequestBody group: GroupDto
+    ) = service.update(self,group)
     /*
     @PostMapping("/{groupId}/member/{newMemberId}")
     fun addMemberToGroup(

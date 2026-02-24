@@ -4,27 +4,99 @@ import api.dtos.GroupDto
 import api.exceptions.GroupDeletionPermissionException
 import api.exceptions.GroupIdNotFoundException
 import api.maps.toDto
-import api.maps.toEntity
 import api.entities.GroupEntity
+import api.entities.GroupMemberEntity
+import api.entities.UserEntity
 import api.exceptions.UserNotFoundException
 import api.repositories.GroupRepository
 import api.repositories.UserRepository
+import jakarta.servlet.http.HttpSession
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import api.entities.GroupMemberId
+import api.exceptions.InvalidCredentialsException
+import api.maps.toEntity
+import api.repositories.MemberRepository
 
 @Service
 class GroupService(
     val groupRepo: GroupRepository,
+    val memberRepo: MemberRepository,
     val userRepo: UserRepository,
 ) {
+    // todo: command functions
+    //      - create group  check
+    //      - update group  check
+    //      - add member    check
+    //      - delete member
+    //      - leave group
+    @Transactional
+    fun create(self: UserEntity, group: GroupDto): GroupDto {
+        //create group
+        val savedGroup = groupRepo.save(group.toEntity());
+
+        // make creator of group Owner
+        val member = GroupMemberEntity(
+            id = GroupMemberId(savedGroup.id, self.id),
+            group = savedGroup,
+            user = self,
+            groupRole = "OWNER"
+        );
+
+        memberRepo.save(member);
+        savedGroup.members.add(member);
+
+        return savedGroup.toDto()
+    }
+
+    @Transactional
+    fun update(self: UserEntity, group: GroupDto): GroupDto {
+        //check if user as the necessary permission to update group
+        checkRole(self, group, "OWNER");
+
+        val savedGroup = groupRepo.save(group.toEntity());
+        return savedGroup.toDto();
+    }
+
+    @Transactional
+    fun addMember(self: UserEntity, group: GroupDto, invited: Long): GroupDto {
+        //check if user as the necessary permission to update group
+        checkRole(self, group, "OWNER");
+
+        val invitedProxy = userRepo.getReferenceById(invited)
+        val groupProxy   = groupRepo.getReferenceById(group.id)
+        //  make new member
+        val member = GroupMemberEntity(
+            id = GroupMemberId(group.id, invited),
+            group = groupProxy,
+            user  = invitedProxy,
+            groupRole = "MEMBER"
+        )
+
+        memberRepo.save(member)
+        val updatedGroup = groupRepo.findById(group.id)
+            .orElseThrow({ Exception("group could not be found")})
+        return updatedGroup.toDto()
+    }
+
+    @Transactional
+    fun deleteMember(user : UserEntity, group: GroupEntity): GroupDto {
+        //todo: Faut y penser
+        throw Exception("not implemented");
+    }
+
+    fun deleteGroup(id: Long): Unit = groupRepo.deleteById(id)
+
+    // todo: query functions
+    //     - get all group
+    //     - get user groups
+    //     - get a group by its id
+    //     - get members
     fun getAllGroups(): List<GroupDto> = groupRepo.findAll()
         .map(GroupEntity::toDto)
 
-    fun getUserGroups(userId: Long): List<GroupDto> {
-
-
-        return groupRepo.findByMembersContainsOROwnerId(UserId)
-            .map(GroupEntity::toDto)
-    }
+    fun getUserGroups(userId: Long): List<GroupDto>
+        = memberRepo.findByUserId(userId).map {it.group.toDto()}
 
 
     fun getGroupById(id: Long): GroupDto = groupRepo.findById(id)
@@ -32,36 +104,21 @@ class GroupService(
         .toDto()
 
 
-    fun upsertGroup(group: GroupDto): GroupDto = groupRepo.save(
-            group.toEntity(userRepo)
-        ).toDto()
 
-    fun addMember(newMemberId: Long, groupId: Long): GroupDto {
-        val group = groupRepo.findById(groupId)
-            .orElseThrow { GroupIdNotFoundException(groupId) }
 
-        val newMember = userRepo.findById(newMemberId)
-            .orElseThrow { UserNotFoundException("User not found: $newMemberId") }
 
-        group.members.add(newMember)
-        return groupRepo.save(group)
-            .toDto()
+    private fun checkRole(user: UserEntity, group: GroupDto, role: String): GroupMemberEntity {
+        //check if user as the necessary permission to update group
+        val membership = memberRepo.findById(
+            GroupMemberId(
+                user.id,
+                group.id
+            )
+        ).orElseThrow { InvalidCredentialsException("User is not in the group") }
+
+        if(membership.groupRole != role) {
+            throw InvalidCredentialsException("User does not have the necessary rights to do that");
+        }
+        return membership
     }
-
-    // NOTE: Use this method instead of deleteGroupe(id) once Auth permits fetching the client's ID
-    fun deleteGroupByOwner(ownerId: Long, groupId: Long): Unit {
-        val owner = groupRepo.findById(ownerId)
-            .orElseThrow { UserNotFoundException("User not found: $ownerId") }
-
-        val group = groupRepo.findById(groupId)
-            .orElseThrow { GroupIdNotFoundException(groupId) }
-
-        if (group.ownerId != owner.id)
-            throw GroupDeletionPermissionException("User ${owner.name} is not the owner of group $groupId")
-
-        groupRepo.delete(group)
-    }
-
-    fun deleteGroup(id: Long): Unit = groupRepo.deleteById(id)
-
 }

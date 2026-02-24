@@ -35,4 +35,4 @@ class UserExceptionsHandler {
 
 class UserNotFoundException(override val message: String) : Exception(message)
 class UserAlreadyExistsException(override val message: String) : Exception(message)
-class InvalidCredentialsException : Exception("Invalid credentials were provided")
+class InvalidCredentialsException(string: String) : Exception("Invalid credentials were provided")

@@ -67,7 +67,7 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
     @Test
     @Sql("/test-data.sql")
     fun `should create group`() {
-        val dto = GroupDto(name="testing",ownerId=1)
+        val dto = GroupDto(name="testing")
         restClient.post()
             .uri("/group")
             .contentType(MediaType.APPLICATION_JSON)
