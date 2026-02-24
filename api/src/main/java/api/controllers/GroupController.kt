@@ -20,13 +20,13 @@ class GroupController(
     @GetMapping
     fun getGroups(@RequestParam(required = false) userId: Long?)
     = if (userId != null) service.getUserGroups(userId)
-        else service.getAllGroups()
+    else service.getAllGroups()
 
 
     @GetMapping("/{id}")
-    fun getGroup(
+    fun getOneGroup(
         @PathVariable id: Long
-    ) = service.getGroup(id)
+    ) = service.getGroupById(id)
 
 
     @PostMapping
@@ -34,13 +34,13 @@ class GroupController(
         @RequestBody group: GroupDto
     ) = service.upsertGroup(group)
 
-
+    /*
     @PostMapping("/{groupId}/member/{newMemberId}")
     fun addMemberToGroup(
         @PathVariable groupId: Long,
         @PathVariable newMemberId: Long
     ) = service.addMember(groupId, newMemberId)
-
+    */
 
     // TODO: Use Auth to fetch the client's ID and call service.deleteGroupByOwner(clientId, groupId) instead
     @DeleteMapping("/{id}")

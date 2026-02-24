@@ -13,56 +13,55 @@ import org.springframework.stereotype.Service
 
 @Service
 class GroupService(
-    val grpRepo: GroupRepository,
-    val usrRepo: UserRepository,
+    val groupRepo: GroupRepository,
+    val userRepo: UserRepository,
 ) {
-    fun getAllGroups(): List<GroupDto> = grpRepo.findAll()
+    fun getAllGroups(): List<GroupDto> = groupRepo.findAll()
         .map(GroupEntity::toDto)
 
     fun getUserGroups(userId: Long): List<GroupDto> {
-        val userFromId = usrRepo.findById(userId)
-            .orElseThrow { UserNotFoundException("User not found: $userId") }
 
-        return grpRepo.findByMembersContains(userFromId)
+
+        return groupRepo.findByMembersContainsOROwnerId(UserId)
             .map(GroupEntity::toDto)
     }
 
 
-    fun getGroup(id: Long): GroupDto = grpRepo.findById(id)
+    fun getGroupById(id: Long): GroupDto = groupRepo.findById(id)
         .orElseThrow { GroupIdNotFoundException(id) }
         .toDto()
 
 
-    fun upsertGroup(group: GroupDto): GroupDto = grpRepo.save(
-            group.toEntity(usrRepo)
+    fun upsertGroup(group: GroupDto): GroupDto = groupRepo.save(
+            group.toEntity(userRepo)
         ).toDto()
 
     fun addMember(newMemberId: Long, groupId: Long): GroupDto {
-        val group = grpRepo.findById(groupId)
+        val group = groupRepo.findById(groupId)
             .orElseThrow { GroupIdNotFoundException(groupId) }
 
-        val newMember = usrRepo.findById(newMemberId)
+        val newMember = userRepo.findById(newMemberId)
             .orElseThrow { UserNotFoundException("User not found: $newMemberId") }
 
         group.members.add(newMember)
-        return grpRepo.save(group)
+        return groupRepo.save(group)
             .toDto()
     }
 
     // NOTE: Use this method instead of deleteGroupe(id) once Auth permits fetching the client's ID
     fun deleteGroupByOwner(ownerId: Long, groupId: Long): Unit {
-        val owner = grpRepo.findById(ownerId)
+        val owner = groupRepo.findById(ownerId)
             .orElseThrow { UserNotFoundException("User not found: $ownerId") }
 
-        val group = grpRepo.findById(groupId)
+        val group = groupRepo.findById(groupId)
             .orElseThrow { GroupIdNotFoundException(groupId) }
 
         if (group.ownerId != owner.id)
             throw GroupDeletionPermissionException("User ${owner.name} is not the owner of group $groupId")
 
-        grpRepo.delete(group)
+        groupRepo.delete(group)
     }
 
-    fun deleteGroup(id: Long): Unit = grpRepo.deleteById(id)
+    fun deleteGroup(id: Long): Unit = groupRepo.deleteById(id)
 
 }

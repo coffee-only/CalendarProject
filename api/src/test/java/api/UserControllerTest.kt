@@ -36,7 +36,7 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
     @Sql("/test-data.sql")
     fun `should return group from userid`() {
         restClient.get()
-            .uri("/api/group")
+            .uri("/group")
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -44,22 +44,32 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
             .isEqualTo(2)
 
         restClient.get()
-            .uri("/api/group?userId=2")
+            .uri("/group?userId=2")
             .exchange()
             .expectBody()
+            //.consumeWith(System.out::println);
             .jsonPath("$.length()")
             .isEqualTo(1)
     }
 
     @Test
     @Sql("/test-data.sql")
-    funf `should `
+    fun `should get one group by its id`(){
+        restClient.get()
+        .uri("/group/1")
+        .exchange()
+        .expectStatus().isOk()
+        .expectBody()
+        .jsonPath("$.lenght()").isEqualTo(1);
+
+    }
+
     @Test
     @Sql("/test-data.sql")
     fun `should create group`() {
         val dto = GroupDto(name="testing",ownerId=1)
         restClient.post()
-            .uri("/api/group")
+            .uri("/group")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(dto)
             .exchange()
@@ -69,5 +79,4 @@ class GroupControllerTest(@Autowired val restClient: WebTestClient) {
             .jsonPath("$.ownerId").isEqualTo(1)
 
     }
-
 }
