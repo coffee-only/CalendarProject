@@ -19,7 +19,10 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/user/register").permitAll()
             .requestMatchers("/actuator/**").permitAll()
-            .anyRequest().permitAll())
+            .anyRequest().permitAll()
+
+
+        )
         .httpBasic(Customizer.withDefaults());
     return http.build();
   }
