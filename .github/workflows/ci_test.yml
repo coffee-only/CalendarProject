@@ -18,9 +18,14 @@ jobs:
           distribution:  'temurin'
           cache: 'gradle'
 
+      - name: make gradlew executable
+        run:  chmod +x api/gradlew
+
       - name: unit test
-        run: cd api && chmod +x gradlew && ./gradlew test
-   
+        run:  ./api/gradlew -p api test
+
+      - name: build
+        run: ./api/gradlew -p api build
   #integration-test:
   #  runs-on: unbuntu-latest
     
