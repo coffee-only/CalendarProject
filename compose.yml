@@ -1,9 +1,7 @@
 services:
-  db:
+  sql-db:
     container_name: db
-    image: mysql # shold take the latest image
-    # port 3306 is the default mysql port
-    # use it for debugging only
+    image: mysql:latest
     ports:
       - "3306:3306"
     networks:
@@ -16,7 +14,19 @@ services:
       - db_data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d:z
 
-    
+
+
+  redis-cache:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - internal
+    hostname: session_cache
+
+
+
   spring-app:
     container_name: api
     build: 
@@ -25,7 +35,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      - sql-db
+      - redis-cache
     develop:
       watch:
         - path: ./app 
@@ -36,6 +47,8 @@ services:
       MYSQL_DATABASE: arch
       MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: arch
+      SPRING_DATA_REDIS_HOST: session_cache
+      SPRING_DATA_REDIS_PORT: 6379
     networks:
       - internal
 volumes:
@@ -43,5 +56,6 @@ volumes:
 
 
 networks:
-  internal: # we sh
+  internal:
+    driver: bridge
 

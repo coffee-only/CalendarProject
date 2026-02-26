@@ -7,14 +7,15 @@ spring:
     hibernate:
       ddl-auto: validate
 
-debug: true
 
+
+#debug: true
 logging:
   level:
-    org:
-      springframework:
-        data: DEBUG
-      hibernate:
-        orm:
-          model:
-            bind: NONE
+    org.springframework:
+      #data: DEBUG
+      security: TRACE
+      #hibernate:
+      #  orm:
+      #    model:
+      #      bind: NONE
