@@ -7,6 +7,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+
+**/src/main/**/resources/application-test.yml
+**/src/test/**/resources/application-test.yml
 ### STS ###
 api/.apt_generated
 api/.classpath
