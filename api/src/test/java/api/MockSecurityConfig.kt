@@ -19,7 +19,7 @@ class MockSecurityConfig(
 ) {
 
     @Test
-    fun `shoud return 402`() {
+    fun `shoud return 401`() {
         mockMvc.get("/group")
             .andExpect {
                 contentType(MediaType.APPLICATION_JSON)

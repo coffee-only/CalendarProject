@@ -3,6 +3,10 @@ package api.controllers
 import api.dtos.GroupDto
 import api.entities.UserEntity
 import api.services.GroupService
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -21,9 +25,9 @@ class GroupController(
 )
 {
     @GetMapping
-    fun getGroups( @SessionAttribute(name="USER") self: UserEntity?,)
-    = if (self != null) service.getUserGroups(self.id)
-    else service.getAllGroups()
+    fun getGroups(@AuthenticationPrincipal jwt: Jwt) =
+        service.getUserGroups(jwt.subject.toLong())
+
 
 
     @GetMapping("/{id}")
@@ -33,15 +37,16 @@ class GroupController(
 
     @PostMapping("/create")
     fun createGroup(
-        @SessionAttribute(name="USER") self: UserEntity,
+        @AuthenticationPrincipal jwt: Jwt,
         @RequestBody group: GroupDto
-    ) = service.create(self,group)
+    ) = {}//service.create(jwt.subject.toLong(),group)
+
 
     @PatchMapping("/update")
     fun updateGroup(
-        @SessionAttribute(name="USER") self: UserEntity,
+        @AuthenticationPrincipal jwt: Jwt,
         @RequestBody group: GroupDto
-    ) = service.update(self,group)
+    ) = {}//service.update(jwt.subject.toLong(),group)
     /*
     @PostMapping("/{groupId}/member/{newMemberId}")
     fun addMemberToGroup(
@@ -53,7 +58,7 @@ class GroupController(
 
     @DeleteMapping("/{id}")
     fun deleteGroup(
-        @SessionAttribute(name="USER") self: UserEntity,
+       @SessionAttribute jwt: Jwt,
         @PathVariable id: Long
     ) = service.deleteGroup(id)
 

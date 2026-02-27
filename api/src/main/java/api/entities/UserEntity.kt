@@ -14,8 +14,8 @@ class UserEntity(
     @Column(
         name = "username",
         unique = false,
-        nullable = false,
-    ) var username: String,
+        nullable = true,
+    ) var username: String? = null,
     @Column(
         name = "firstname",
         nullable = true,
