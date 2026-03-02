@@ -5,6 +5,7 @@ import api.entities.UserEntity
 import api.services.GroupService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -36,7 +37,7 @@ class GroupController(
         @RequestBody group: GroupDto
     ) = service.create(self,group)
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     fun updateGroup(
         @SessionAttribute(name="USER") self: UserEntity,
         @RequestBody group: GroupDto
