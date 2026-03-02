@@ -122,10 +122,12 @@ class GroupService(
                 user.id,
                 group.id
             )
-        ).orElseThrow { InvalidCredentialsException("User is not in the group") }
+        ).orElseThrow {
+            ResponseStatusException(HttpStatus.FORBIDDEN,"User is not in the group")
+        }
 
         if(membership.groupRole != role) {
-            throw InvalidCredentialsException("User does not have the necessary rights to do that");
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED,"User does not have the necessary rights to do that");
         }
         return membership
     }
