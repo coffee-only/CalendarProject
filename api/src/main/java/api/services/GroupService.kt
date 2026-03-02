@@ -24,9 +24,9 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class GroupService(
-    val groupRepo: GroupRepository,
-    val memberRepo: MemberRepository,
-    val userRepo: UserRepository,
+    private val groupRepo: GroupRepository,
+    private val memberRepo: MemberRepository,
+    private val userRepo: UserRepository,
     private val httpServletResponse: HttpServletResponse,
 ) {
     // todo: command functions
