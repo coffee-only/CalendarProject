@@ -18,12 +18,16 @@ import api.entities.GroupRole
 import api.exceptions.InvalidCredentialsException
 import api.maps.toEntity
 import api.repositories.MemberRepository
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class GroupService(
     val groupRepo: GroupRepository,
     val memberRepo: MemberRepository,
     val userRepo: UserRepository,
+    private val httpServletResponse: HttpServletResponse,
 ) {
     // todo: command functions
     //      - create group  check
@@ -76,7 +80,10 @@ class GroupService(
 
         memberRepo.save(member)
         val updatedGroup = groupRepo.findById(group.id)
-            .orElseThrow({ Exception("group could not be found")})
+            .orElseThrow({
+                ResponseStatusException(HttpStatus.BAD_REQUEST,"group could not be found")
+            })
+
         return updatedGroup.toDto()
     }
 
