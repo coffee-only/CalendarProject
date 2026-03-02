@@ -14,6 +14,7 @@ import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
 import org.springframework.web.servlet.function.RequestPredicates.contentType
 import org.testcontainers.junit.jupiter.Container
@@ -119,7 +120,7 @@ class MockGroupController(
     @Sql("/test-data.sql")
     fun `should update a group`(){
         val created = GroupDto(id=1,name="NewGroup")
-        mockMvc.post("/group/update") {
+        mockMvc.patch("/group/update") {
             sessionAttr("USER", user)
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(created)
@@ -132,12 +133,12 @@ class MockGroupController(
 
 
         val unauthorised = GroupDto(id=2,name="NewGroup")
-        mockMvc.post("/group/update") {
+        mockMvc.patch("/group/update") {
             sessionAttr("USER", user)
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(unauthorised)
         }.andExpect {
-            status { isUnauthorized() }
+            status { isForbidden() }
         }
     }
 }
