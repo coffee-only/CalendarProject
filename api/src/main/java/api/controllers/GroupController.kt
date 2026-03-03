@@ -39,14 +39,14 @@ class GroupController(
     fun createGroup(
         @AuthenticationPrincipal jwt: Jwt,
         @RequestBody group: GroupDto
-    ) = {}//service.create(jwt.subject.toLong(),group)
+    ) = service.create(jwt.subject.toLong(),group)
 
 
     @PatchMapping("/update")
     fun updateGroup(
         @AuthenticationPrincipal jwt: Jwt,
         @RequestBody group: GroupDto
-    ) = {}//service.update(jwt.subject.toLong(),group)
+    ) = service.update(jwt.subject.toLong(),group)
     /*
     @PostMapping("/{groupId}/member/{newMemberId}")
     fun addMemberToGroup(

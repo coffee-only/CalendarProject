@@ -7,6 +7,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import tools.jackson.databind.ObjectMapper
 
 @Component
@@ -20,13 +21,20 @@ class OAuth2EntryPoint(
         response: HttpServletResponse,
         authException: AuthenticationException
     ) {
+        val baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+            .build()
+            .toUriString()
+
         response.apply{
             contentType = MediaType.APPLICATION_JSON_VALUE
             status = HttpServletResponse.SC_UNAUTHORIZED
 
             //grab available links and create response
             val registry = property.registration
-                    .asSequence().associate { property-> property.key to "/oauth2/authorization/"+ property.key }
+                    .asSequence()
+                    .associate {
+                        (key,_)-> key to "$baseUrl/oauth2/authorization/$key"
+                    }
 
             val body = mapOf(
                 "error" to "invalid token",

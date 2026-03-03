@@ -8,11 +8,13 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.web.servlet.function.RequestPredicates.contentType
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 
 import kotlin.test.Test
 
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 class MockSecurityConfig(
     @Autowired val mockMvc: MockMvc

@@ -28,7 +28,7 @@ class OAuthSuccessHandler(
         val auth = authentication.principal as OAuth2User
 
         val email= auth.getAttribute<String>("email")
-            ?: throw InvalidCredentialsException("No email associated with this auth")
+            ?: throw InvalidCredentialsException()
 
         val user = userRepo.findByEmail(email)
             ?: userRepo.save(UserEntity(email = email))
