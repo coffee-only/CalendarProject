@@ -36,15 +36,16 @@ class GroupService(
     //      - delete member
     //      - leave group
     @Transactional
-    fun create(self: UserEntity, group: GroupDto): GroupDto {
+    fun create(self: Long, group: GroupDto): GroupDto {
         //create group
-        val savedGroup = groupRepo.save(group.toEntity());
+        val savedGroup = groupRepo.save(group.toEntity())
+        val selfProxy = userRepo.getReferenceById(self)
 
         // make creator of group Owner
         val member = GroupMemberEntity(
-            id = GroupMemberId(savedGroup.id, self.id),
+            id = GroupMemberId(savedGroup.id, self),
             group = savedGroup,
-            user = self,
+            user = selfProxy,
             groupRole = GroupRole.OWNER,
         );
 
@@ -55,7 +56,7 @@ class GroupService(
     }
 
     @Transactional
-    fun update(self: UserEntity, group: GroupDto): GroupDto {
+    fun update(self: Long, group: GroupDto): GroupDto {
         //check if user as the necessary permission to update group
         checkRole(self, group, GroupRole.OWNER);
 
@@ -64,7 +65,7 @@ class GroupService(
     }
 
     @Transactional
-    fun addMember(self: UserEntity, group: GroupDto, invited: Long): GroupDto {
+    fun addMember(self: Long, group: GroupDto, invited: Long): GroupDto {
         //check if user as the necessary permission to update group
         checkRole(self, group, GroupRole.OWNER);
 
@@ -115,11 +116,11 @@ class GroupService(
 
 
 
-    private fun checkRole(user: UserEntity, group: GroupDto, role: GroupRole): GroupMemberEntity {
+    private fun checkRole(user: Long, group: GroupDto, role: GroupRole): GroupMemberEntity {
         //check if user as the necessary permission to update group
         val membership = memberRepo.findById(
             GroupMemberId(
-                user.id,
+                user,
                 group.id
             )
         ).orElseThrow {

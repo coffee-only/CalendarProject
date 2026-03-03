@@ -2,27 +2,23 @@ CREATE TABLE IF NOT EXISTS users (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     firstname VARCHAR(50),
     lastname  VARCHAR(50),
-    username  VARCHAR(50) NOT NULL,
+    username  VARCHAR(50),
     user_creation DATE NOT NULL,
 	email VARCHAR(100) UNIQUE NOT NULL,
 	PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS user_group (
-	id INTEGER NOT NULL,
-	owner_id INTEGER NOT NULL,
+	id INTEGER  NOT NULL AUTO_INCREMENT,
     group_name VARCHAR(50) NOT NULL,
     group_creation DATE NOT NULL,
-	PRIMARY KEY(id),
-	FOREIGN KEY(owner_id) 
-	  REFERENCES users(id)
-	  ON DELETE SET NULL
-	  ON UPDATE CASCADE
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE IF NOT EXISTS  group_member (
 	group_id INTEGER NOT NULL,
 	user_id INTEGER NOT NULL,
+    group_role ENUM ('OWNER', 'MEMBER') NOT NULL,
   PRIMARY KEY(group_id, user_id),
 
 	FOREIGN KEY(group_id) 

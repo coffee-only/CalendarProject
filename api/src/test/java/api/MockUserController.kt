@@ -2,7 +2,9 @@ package api
 
 
 import api.dtos.GroupDto
+import api.dtos.UserDTO
 import api.entities.UserEntity
+import api.services.TokenService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,12 +13,12 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
-import org.springframework.web.servlet.function.RequestPredicates.contentType
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.mysql.MySQLContainer
@@ -26,16 +28,16 @@ import tools.jackson.databind.ObjectMapper
 import java.time.LocalDate
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Testcontainers
 @AutoConfigureMockMvc
 @Sql("/init.sql")
 class MockGroupController(
     @Autowired val mockMvc: MockMvc,
-    @Autowired val objectMapper: ObjectMapper
+    @Autowired val objectMapper: ObjectMapper,
+    @Autowired val tokenService: TokenService
 ) {
 
-    lateinit var user: UserEntity;
-    lateinit var session: MockHttpSession
 
 
     companion object {
@@ -46,25 +48,15 @@ class MockGroupController(
             .withUsername("test")
             .withPassword("test")
     }
-    @BeforeEach
-    fun setUp() {
-         user = UserEntity (
-            id=1,
-            firstname = "Alice",
-            lastname = "Smith",
-            username = "alice01",
-            creationDate = LocalDate.parse("2026-01-01"),
-            email = "alice@example.com"
-        )
-        session = MockHttpSession()
-        session.setAttribute("USER", user)
-    }
+
 
     @Test
     @Sql("/test-data.sql")
     fun `should return group from userid`() {
+        val mockToken = tokenService.Encode(UserDTO(id = 1,username = "", email = "test@test.com"))
+
         mockMvc.get("/group") {
-            sessionAttr("USER", user)
+            header("Authorization", "Bearer $mockToken")
         }.andExpect {
                    status { isOk() }
                    content { contentType(MediaType.APPLICATION_JSON) }
@@ -74,19 +66,16 @@ class MockGroupController(
                    jsonPath("$[1].creationDate") { value("2026-01-03") }
                    jsonPath("$.length()") { value("2") }
         }
-
-        mockMvc.get("/group")
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-                jsonPath("$.length()") { value("3") }
-        }
     }
 
     @Test
     @Sql("/test-data.sql")
     fun `should return one group by its id`(){
-        mockMvc.get("/group/1")
+        val mockToken = tokenService.Encode(UserDTO(id = 1,username = "", email = "test@test.com"))
+
+        mockMvc.get("/group/1"){
+            header("Authorization", "Bearer $mockToken")
+        }
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
@@ -102,9 +91,11 @@ class MockGroupController(
     @Test
     @Sql("/test-data.sql")
     fun `should create a group where creator becomes owner`(){
+        val mockToken = tokenService.Encode(UserDTO(id = 1,username = "", email = "test@test.com"))
+
         val created = GroupDto(name="testing")
         mockMvc.post("/group/create") {
-            sessionAttr("USER", user)
+            header("Authorization", "Bearer $mockToken")
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(created)
         }.andExpect {
@@ -119,9 +110,11 @@ class MockGroupController(
     @Test
     @Sql("/test-data.sql")
     fun `should update a group`(){
+        val mockToken = tokenService.Encode(UserDTO(id = 1,username = "", email = "test@test.com"))
+
         val created = GroupDto(id=1,name="NewGroup")
         mockMvc.patch("/group/update") {
-            sessionAttr("USER", user)
+            header("Authorization", "Bearer $mockToken")
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(created)
         }.andExpect {
@@ -134,7 +127,7 @@ class MockGroupController(
 
         val unauthorised = GroupDto(id=2,name="NewGroup")
         mockMvc.patch("/group/update") {
-            sessionAttr("USER", user)
+            header("Authorization", "Bearer $mockToken")
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(unauthorised)
         }.andExpect {
