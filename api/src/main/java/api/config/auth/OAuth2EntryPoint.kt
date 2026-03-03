@@ -26,7 +26,7 @@ class OAuth2EntryPoint(
 
             //grab available links and create response
             val registry = property.registration
-                .asSequence().associate { property-> property.key to "/oauth2/authorization/"+ property.key }
+                    .asSequence().associate { property-> property.key to "/oauth2/authorization/"+ property.key }
 
             val body = mapOf(
                 "error" to "invalid token",

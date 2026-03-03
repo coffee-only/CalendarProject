@@ -11,6 +11,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -25,6 +26,7 @@ import tools.jackson.databind.ObjectMapper
 import java.time.LocalDate
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Testcontainers
 @AutoConfigureMockMvc
 @Sql("/init.sql")
@@ -45,10 +47,7 @@ class MockGroupController(
             .withUsername("test")
             .withPassword("test")
     }
-    @BeforeEach
-    fun setUp() {
 
-    }
 
     @Test
     @Sql("/test-data.sql")
