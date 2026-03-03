@@ -6,3 +6,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+debug: true
+
+logging:
+  level:
+    org:
+      springframework:
+        data: DEBUG
+      hibernate:
+        orm:
+          model:
+            bind: NONE

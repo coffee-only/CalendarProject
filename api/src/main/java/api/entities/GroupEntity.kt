@@ -2,12 +2,14 @@ package api.entities
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import java.time.LocalDate
 
@@ -18,10 +20,6 @@ class GroupEntity(
         strategy = GenerationType.IDENTITY
     ) var id: Long = 0,
     @Column(
-        name = "owner_id",
-        nullable = false,
-    ) var ownerId: Long = 0,
-    @Column(
         name = "group_name",
         nullable = false,
     ) var name: String = "",
@@ -30,11 +28,7 @@ class GroupEntity(
         nullable = false,
     ) var creationDate: LocalDate = LocalDate.now(),
     
-    @ManyToMany
-    @JoinTable(
-        name = "group_member",
-        joinColumns = [JoinColumn(name = "group_id")],
-        inverseJoinColumns = [JoinColumn(name = "user_id")]
-    ) var members: MutableList<UserEntity> = mutableListOf()
+    @OneToMany(mappedBy = "group")
+    var members: MutableList<GroupMemberEntity> = mutableListOf()
 
 )

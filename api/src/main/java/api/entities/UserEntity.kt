@@ -34,7 +34,6 @@ class UserEntity(
         name = "user_creation",
         nullable = false,
     ) var creationDate: LocalDate = LocalDate.now(),
-    @ManyToMany(
-        mappedBy = "members"
-    ) var groups: MutableList<GroupEntity> = mutableListOf()
+    @OneToMany(mappedBy = "user")
+    var groups: MutableList<GroupMemberEntity> = mutableListOf()
 )

@@ -9,31 +9,32 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS user_group (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	owner_id INTEGER NOT NULL,
     group_name VARCHAR(50) NOT NULL,
     group_creation DATE NOT NULL,
 
-	FOREIGN KEY(owner_id) 
+	FOREIGN KEY(owner_id)
 	  REFERENCES users(id)
 	  ON DELETE SET NULL
 	  ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS  group_member (
-	group_id INTEGER NOT NULL,
-	user_id INTEGER NOT NULL,
+    group_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    group_role ENUM('OWNER', 'MEMBER') NOT NULL,
     PRIMARY KEY(group_id, user_id),
 
-	FOREIGN KEY(group_id) 
-	  REFERENCES user_group(id)
-	  ON DELETE CASCADE
-	  ON UPDATE CASCADE,
+    FOREIGN KEY(group_id)
+    REFERENCES user_group(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
 
-	FOREIGN KEY(user_id) 
-	  REFERENCES users(id)
-	  ON DELETE CASCADE
-	  ON UPDATE CASCADE
-);
+    FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+    );
+
 
 CREATE TABLE IF NOT EXISTS  Friend (
 	user_id INTEGER NOT NULL,
