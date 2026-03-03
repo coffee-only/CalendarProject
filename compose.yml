@@ -24,19 +24,17 @@ services:
       - "8080:8080"
     depends_on:
       - sql-db
-      - redis-cache
     develop:
       watch:
         - path: ./app 
           action: rebuild
     environment:
-      MYSQL_HOST: db
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: arch
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: arch
-      SPRING_DATA_REDIS_HOST: session_cache
-      SPRING_DATA_REDIS_PORT: 6379
+      - MYSQL_HOST=sql-db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=arch
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=arch
+      - MYSQL_ROOT_PASSWORD=arch
     networks:
       - internal
 volumes:

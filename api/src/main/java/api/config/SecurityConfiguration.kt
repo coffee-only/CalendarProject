@@ -1,4 +1,5 @@
 package api.config
+
 import api.config.auth.OAuth2EntryPoint
 import api.config.auth.OAuthSuccessHandler
 import org.springframework.context.annotation.Bean;
@@ -7,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 /**
  * SecurityConfig
@@ -14,18 +16,20 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 class SecurityConfiguration(
+
     private val authEntryPoint: OAuth2EntryPoint,
     private val oAuthSuccesHandler: OAuthSuccessHandler,
     private val jwtConfig: JwtConfig
 ) {
-
     @Bean
-    fun filterChain( http: HttpSecurity ): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+
 
         return http
             .formLogin { it.disable() }         //////////////////////////////
             .httpBasic { it.disable() }         //      stateless api       //
             .csrf      { it.disable() }         //////////////////////////////
+
             .sessionManagement { session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
@@ -44,5 +48,6 @@ class SecurityConfiguration(
             }
             .build()
     }
+
 
 }
