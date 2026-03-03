@@ -19,7 +19,7 @@ import java.time.Instant
 @Component
 class OAuthSuccessHandler(
     private val userRepo: UserRepository,
-    private val jwtEncoder: JwtEncoder,
+    //private val jwtEncoder: JwtEncoder,
 ): AuthenticationSuccessHandler {
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
@@ -34,25 +34,10 @@ class OAuthSuccessHandler(
         val user = userRepo.findByEmail(email)
             ?: userRepo.save(UserEntity(email=email))
 
-        val token = encode(user)
-        response.status = HttpServletResponse.SC_OK
-        response.setHeader("Authorization", "Bearer $token")
-        response.writer.write("{status: success}")
-    }
-
-    fun encode(user: UserEntity): String {
-
-        val header = JwsHeader.with(MacAlgorithm.HS256).build()
-
-        val claims = JwtClaimsSet.builder()
-            .issuer("CalendarProject")
-            .issuedAt(Instant.now())
-            .expiresAt(Instant.now().plusSeconds(3600)) // Expire dans 1h
-            .subject(user.id.toString())
-            .build()
-
-        val parameters = JwtEncoderParameters.from(header, claims)
-        return jwtEncoder.encode(parameters).tokenValue
+        //val token = encode(user)
+        //response.status = HttpServletResponse.SC_OK
+        //response.setHeader("Authorization", "Bearer $token")
+        //response.writer.write("{status: success}")
     }
 
 }

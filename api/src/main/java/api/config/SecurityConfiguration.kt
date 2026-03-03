@@ -28,8 +28,7 @@ import org.springframework.security.web.SecurityFilterChain
 @Configuration
 class SecurityConfiguration(
     private val authEntryPoint: OAuth2EntryPoint,
-    private val oAuthSuccesHandler: OAuthSuccessHandler,
-    private val rsaKey: RSAKeyProperties,
+    private val oAuthSuccesHandler: OAuthSuccessHandler
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -50,30 +49,10 @@ class SecurityConfiguration(
             }
             .oauth2ResourceServer{ oauth2 ->
                 oauth2.jwt { jwt ->
-                    jwt.decoder(jwtDecoder())
+                   // jwt.decoder(jwtDecoder())
                 }
                 oauth2.authenticationEntryPoint(authEntryPoint)
             }
             .build()
-    }
-    @Bean
-    fun jwtEncoder(): JwtEncoder {
-        val jwk = RSAKey.Builder(rsaKey.publickey).privateKey(rsaKey.privatekey).build()
-        val jwks = ImmutableJWKSet<SecurityContext>(JWKSet(jwk))
-        return NimbusJwtEncoder(jwks)
-    }
-
-    @Bean
-    fun jwtDecoder(): JwtDecoder {
-        return NimbusJwtDecoder.withPublicKey(rsaKey.publickey).build()
-    }
-
-    @Bean
-    fun clientRegistrationRepository(): ClientRegistrationRepository {
-        val google = CommonOAuth2Provider.GOOGLE.getBuilder("google")
-            .clientId("your-id")
-            .clientSecret("your-secret")
-            .build()
-        return InMemoryClientRegistrationRepository(google)
     }
 }

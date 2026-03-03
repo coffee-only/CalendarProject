@@ -47,16 +47,7 @@ class MockGroupController(
     }
     @BeforeEach
     fun setUp() {
-         user = UserEntity (
-            id=1,
-            firstname = "Alice",
-            lastname = "Smith",
-            username = "alice01",
-            creationDate = LocalDate.parse("2026-01-01"),
-            email = "alice@example.com"
-        )
-        session = MockHttpSession()
-        session.setAttribute("USER", user)
+
     }
 
     @Test
