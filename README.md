@@ -1,5 +1,6 @@
-# WhenWhere
-
-### what is it about
+# Rules
+- kotlin      version <....>
+- Spring boot version <....>
+ to be added more
 
 
