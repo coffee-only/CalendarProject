@@ -18,7 +18,11 @@ class SecurityConfiguration {
         http {
             csrf { disable() }
             httpBasic { disable() }
-            authorizeHttpRequests { permitAll }
+            authorizeHttpRequests {
+                authorize("/user/register", permitAll)
+                authorize("/actuator/**", permitAll)
+                authorize(anyRequest, permitAll)
+            }
         }
         return http.build()
     }
